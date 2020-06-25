@@ -12,7 +12,7 @@ in all our templates(pages).So we created a layout template in order to render(a
 the code that is common to all our pages(templates) and only store on each template('home','/contact')
 the content that is relevant(or exclusive)to each page).--}}
 
-
+{{-- TEMPLATE/VIEW URL IS http://laravel.test/contact --}}
 {{-- <body> --}}
 @extends('layout'){{--This is a Laravel blade directive(starts with an @), the directive
     make posible to render on this page the code that resides on layout template(that is common
