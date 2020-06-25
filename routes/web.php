@@ -40,6 +40,7 @@ Route::view('/contact', 'contact');
 as you want enclosed in curly braces and separated by slash, optional parameter use ?)for the URL identified with curly braces.
 $id is the argument passed from the URL parameter.
 $pages is an associative array(that consist of a key referencing a value like a dictionary)*/
+
 Route::get('/blog-post/{id}/{welcome?}', function($id, $welcome = 1){
     $pages = [
         1 => [

@@ -1,3 +1,7 @@
+{{--TEMPLATE/VIEW URL(default) IS http://laravel.test/blog-post/1(default display 'Hello from page 1') or http://laravel.test/blog-post/1/1(with optional parameter /1, dispays same result as http://laravel.test/blog-post/1 ) or 
+    http://laravel.test/blog-post/1/2 (with optional parameter /2(display 'Welcome to from page 1')) or 
+    http://laravel.test/blog-post/2/1 (with optional parameters /2/1 display 'Hello from page 2') or
+    http://laravel.test/blog-post/2/2 (with optional parameters /2/2 display 'Welcome to from page 2)--}}
 @extends('layout')
 
 @section('content')
