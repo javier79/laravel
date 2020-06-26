@@ -7,6 +7,16 @@
     <title>Document</title>
 </head>
 <body>
+    <ul>
+        <li><a href="{{ route('home') }}">Home</a></li>
+        <li><a href="{{ route('contact') }}">Contact</a></li>
+        <li><a href="{{ route('blog-post',['id'=> 1]) }}">Blog post 1</a></li>{{-- As our URL use a parameter
+            the parameter is passed in an associative array --}}
+
+        {{--<li><a href="/">Home</a></li> This is a reference with a hardcoded URL
+        above{{ route('home') }}syntax allows for the use of names as reference ()to generate URLs)--}}
+
+    </ul>
     @yield('content'){{-- This directive is the reference for the content between 
         @section('content')/@endsection (on contact and home pages(templates)) and points to the tags where
         their content will display when the layout template is extended to each page(ex:home/contact pages 

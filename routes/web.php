@@ -25,16 +25,21 @@ is rendered(GET) */
 //     return view('home');//At this point we create a home template
 // });
 
-Route::view('/', 'home');//This view() from object Route is a simpler syntax
-//that delivers the same behavior as the function commented above. It accepts two parameters
-//the first is the URL and the second is the template. Same for function below.
+Route::view('/', 'home')->name('home');/*This view() from object Route is a simpler syntax
+that delivers the same behavior as the function commented above. It accepts two parameters
+the first is the URL and the second is the template. name('') allows
+the naming of our routes and employ them as references(to generate the URL) to the URLs, otherwise if URLs 
+were to be used explicitly(hardcoded),in case the URL change we then most edit the URL everywhere we used it. 
+With name() if our URL changes we edit the URL only, a let the reference(name) as it is.
+ 
 
 
-// Route::get('/contact', function() {
+
+// Route::get('/contact', function() {/*Commented as function below employ a simpler syntax with the same behavior*/
 //     return view('contact');
 // });
 
-Route::view('/contact', 'contact');
+Route::view('/contact', 'contact')->name('contact');
 
 /*Funtion below we are employing a parameter(for URL you can use as many parameters 
 as you want enclosed in curly braces and separated by slash, optional parameter use ?)for the URL identified with curly braces.
@@ -52,11 +57,11 @@ Route::get('/blog-post/{id}/{welcome?}', function($id, $welcome = 1){
     ];
     $welcomes = [1 => 'Hello', 2 => 'Welcome to '];
 
-    return view('blog-post',['data'=> $pages[$id], 'welcome' => $welcomes[$welcome]]);/*The first parameter for function view() is 
-    the view(or template).
-    (Remember we already pass the URL in get()) and in the second parameter we are passing data(default parameter)
+    return view('blog-post',['data'=> $pages[$id], 'welcome' => $welcomes[$welcome]],);
+    /*The first parameter for function view() is 
+    the view(or template).(Remember we already pass the URL in get()) and in the second parameter we are passing data(default parameter)
     as an array(associative). We pass an associative array with reference name 'data' to $pages[$id],
     $id as our index for $pages array.*/
-});
+})->name('blog-post');
 
 
