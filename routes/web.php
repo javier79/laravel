@@ -14,69 +14,37 @@ once the extension was downgraded to version 1.2.3, the issue seems to be resolv
 | contains the "web" middleware group. Now create something great!
 |
 */
-/* Static method 'get'(default Route method) from the Route object correspond to the http verbs(POST, GET, PUT, PATCH, and DELETE.), it's not needed to employ a 'use' statement at the top
-as i understand at the moment, it belongs to a class built-in in Laravel. GET is used to fetch data it's parameters
-are first the address or URL('/') and second the closure, a function without a name, it's define here and
-inmediately call,  view() is called to find a 'welcome' template and it must return some content, what this function return 
-is rendered(GET) */
+/* Static method 'get'(default Route method) from the Route object correspond to the http verbs(POST, GET, PUT, PATCH, and DELETE.), GET is used to fetch data it's parameters
+are first the address or URL('/') and second the closure(at this state of the project closure were removed and instead we are using HomeController@*/
 
-// Route::get('/', function () {
-//     //return 123;//This line was used to test the rendering, look for Master Laravel...screenshot
-//     return view('home');//At this point we create a home template
-// });
+
 
 Route::get('/', 'HomeController@home')->name('home');/*Route was updated (in branch controllers_basics) 
 from(Route::view('/', 'home')->name('home');to Route::get('/', 'HomeController@home')->name('home');
 closure were removed and instead we are using HomeController.The @home(function name at HomeController) 
 Rendering and behavior of page do not change.
-This view() from object Route is a simpler syntax
-that delivers the same behavior as the function commented above. It accepts two parameters
-the first is the URL and the second is the template. name('') allows
-the naming of our routes and employ them as references(to generate the URL) to the URLs, otherwise if URLs 
-were to be used explicitly(hardcoded),in case the URL change we then most edit the URL everywhere we used it. 
-With name() if our URL changes we edit the URL only, a let the reference(name) as it is.
- 
+name('') allows the naming of our routes and employ them as references(to generate the URL) to the URLs*/
 
-
-
-// Route::get('/contact', function() {/*Commented as function below employ a simpler syntax with the same behavior*/
-//     return view('contact');
-// });
 
 Route::get('/contact', 'HomeController@contact')->name('contact');/*Route was updated (in branch controllers_basics)
 from(Route::view('/contact', 'contact')->name('contact'); to Route::get('/contact', 'HomeController@contact')->name('contact');
 also closure were removed and instead we are using HomeController.The @contact(function name at HomeController) 
-Rendering and behavior of page do not change.*/
+Rendering and behavior of page do not change.
+The logic for this route was moved to HomeController.php*/
 
-/*Funtion below we are employing a parameter(for URL you can use as many parameters 
-as you want enclosed in curly braces and separated by slash, optional parameter use ?)for the URL identified with curly braces.
-$id is the argument passed from the URL parameter.
-$pages is an associative array(that consist of a key referencing a value like a dictionary)*/
+
+
 
 Route::get('/blog-post/{id}/{welcome?}', 'HomeController@blogPost')->name('blog-post');
 
-/*Route was updated (in branch controllers_basics) 
-from(Route::get('/blog-post/{id}/{welcome?}', function ($id, $welcome = 1); to Route::get('/blog-post/{id}/{welcome?}', 'HomeController@blogPost')->name('blog-post'); 
+/*Funtion above we are employing a parameter(for URL you can use as many parameters 
+as you want enclosed in curly braces and separated by slash, optional parameter use ?) for the URL, identified with curly braces.
+*/
+
+/*Route was updated (in branch controllers_basics) from(Route::get('/blog-post/{id}/{welcome?}', function ($id, $welcome = 1); to Route::get('/blog-post/{id}/{welcome?}', 'HomeController@blogPost')->name('blog-post'); 
 also closure were removed and instead we are using HomeController.The @blogPost(function name at HomeController)
  Rendering and behavior of page do not change.*/
-/*Code below(from $pages on..) moved to HomeController.php
-Route::get('/blog-post/{id}/{welcome?}', function ($id, $welcome = 1) {
-    $pages = [
-        1 => [
-            'title' => 'from page 1',
-        ],
-        2 => [
-            'title' => 'from page 2',
-        ],
-    ];
-    $welcomes = [1 => 'Hello', 2 => 'Welcome to '];
+//The logic for this route was moved to HomeController.php
 
-    return view('blog-post',['data'=> $pages[$id], 'welcome' => $welcomes[$welcome],]);
-   
-    /*The first parameter for function view() is 
-    the view(or template).(Remember we already pass the URL in get()) and in the second parameter we are passing data(default parameter)
-    as an array(associative). We pass an associative array with reference name 'data' to $pages[$id],
-    $id as our index for $pages array.*/
-//})->name('blog-post');
 
 

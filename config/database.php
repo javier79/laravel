@@ -15,7 +15,13 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'mysql'),/*this line is referencing a default database connection generated
+    by the system. The first parameter of env() is the enviroment variable name,
+    the second is the default value in case the enviroment variable name can't be found. Enviroment variables let 
+    us create applications that are enviroment independent, so you can create one code that runs in every posible
+    enviroment(exmpl:local developer enviroment, testing enviroment and production enviroment) and
+    what changes is the configuration that reference this enviroment variables.
+    'mysql'is referencing mysql default connection below and not a database named 'mysql'*/
 
     /*
     |--------------------------------------------------------------------------
