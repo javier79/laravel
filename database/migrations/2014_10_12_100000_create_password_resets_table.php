@@ -9,6 +9,7 @@ class CreatePasswordResetsTable extends Migration
     /**
      * Run the migrations.
      */
+    /* Function up() allows to execute current migration(table 'password_resets' with three columns) on database */
     public function up()
     {
         Schema::create('password_resets', function (Blueprint $table) {
@@ -21,6 +22,7 @@ class CreatePasswordResetsTable extends Migration
     /**
      * Reverse the migrations.
      */
+    /* Function down() allows to drop 'password_resets' table on rollback command(when the current migration is the last one executed) */
     public function down()
     {
         Schema::dropIfExists('password_resets');

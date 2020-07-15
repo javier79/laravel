@@ -11,6 +11,8 @@ class CreateUsersTable extends Migration
      *
      * @return void
      */
+    /* Function up() allows to execute current migration(table 'users' with eight columns 
+    as timestamp(displays two columns created_at and updated_at) on database */
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
@@ -29,6 +31,7 @@ class CreateUsersTable extends Migration
      *
      * @return void
      */
+    /* Function down() allows to drop 'users' table on rollback command(when the current migration is the last one executed) */
     public function down()
     {
         Schema::dropIfExists('users');
