@@ -11,6 +11,7 @@ class CreateUsersTable extends Migration
      *
      * @return void
      */
+    //This is a default migration created with the project
     /* Function up() allows to execute current migration(table 'users' with eight columns 
     as timestamp(displays two columns created_at and updated_at) on database */
     public function up()
