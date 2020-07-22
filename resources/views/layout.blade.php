@@ -10,7 +10,8 @@
     <ul>
         <li><a href="{{ route('home') }}">Home</a></li>
         <li><a href="{{ route('contact') }}">Contact</a></li>
-        <li><a href="{{ route('blog-post',['id'=> 1]) }}">Blog post 1</a></li>{{-- As our URL use a parameter
+        {{-- Code below was eliminated due it is going into a separate Controller class to clean up the code --}}
+        {{-- <li><ahref="route('blog-post',['id'=>1]) ">Blog post 1</a></li>--}}{{-- As our URL use a parameter
             the parameter is passed in an associative array --}}
 
         {{--<li><a href="/">Home</a></li> This is a reference with a hardcoded URL

@@ -33,9 +33,15 @@ Rendering and behavior of page do not change.
 The logic for this route was moved to HomeController.php*/
 
 
+Route::resource('posts', 'PostController')->only(['index', 'show']);
+/*As we only want to display their list of the posts and an individual blog post.
+since we have all these methods and the routes are ultimately generated we can
+call another method to chain on other methods on the resource method and the method name is only() and
+it accepts an array.So now you can specify which of those routes you want.So you only use the suffix after the resource name.
+So we only want to index and show*/
 
-
-Route::get('/blog-post/{id}/{welcome?}', 'HomeController@blogPost')->name('blog-post');
+//Code below was eleminated due it's purpose was to explain the use of required and optional parameters
+//Route::get('/blog-post/{id}/{welcome?}', 'HomeController@blogPost')->name('blog-post');
 
 /*Funtion above we are employing a parameter(for URL you can use as many parameters 
 as you want enclosed in curly braces and separated by slash, optional parameter use ?) for the URL, identified with curly braces.
