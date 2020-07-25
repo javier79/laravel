@@ -2,6 +2,8 @@
     @extends('layout')
 
     @section('content')
+    {{--The links for this view is http://laravel.test/posts/1 or http://laravel.test/posts/2  
+    (/1 and /2 refers the primary key which is ID), as i understand it's determined by the URI in the route:list--}}
         <h1>{{ $post-> title }}</h1>
         <p>{{ $post->content }}</p>
 
@@ -12,7 +14,9 @@
          
 
         
-        @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 5)  
+        @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 5){{-- For more info on Carbon library go to cheat sheet --}}
             <strong>New!</strong> 
         @endif
     @endsection('content')
+
+
