@@ -13,13 +13,12 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+   public function index()
     {
-        dd(BlogPost::all());/*loading model. Use our handy larvel function called D.D.
-         and it's a shortcut for dump and die. So it will just echo the contents of 
-         whatever was passed through it and die. Run http://laravel.test/posts
-         to see the collection containing out two blog posts see Screenshot
-         **Due the use App\BlogPost; the name space App is not needed before BlogPost***/
+        return view('posts.index', ['posts' => BlogPost::all()]);
+        /*posts.index(folder.file) is the reference to the location of the view
+        The parameeter is an associative array, 'posts' is just how we name the key
+        that would reference BlogPost::all()*/ 
     }
 
 
@@ -34,7 +33,10 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        dd(BlogPost::find($id));/*fetching a model. Run http://laravel.test/posts/1 or 
+        return view('posts.show',['post'=> BlogPost::findOrFail($id)]);
+        //syntax below was commented as we are using views and needed a different syntax
+        /*dd(BlogPost::find($id));fetching a model. This method will show an specific elements
+        of the collection defined by id. Run http://laravel.test/posts/1 or 
         http://laravel.test/posts/2  (/1 and /2 refers the primary key which is ID) See Screenshots
         **Due the use App\BlogPost; the name space App is not needed before BlogPost** */ 
     }
