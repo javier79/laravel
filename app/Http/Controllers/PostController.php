@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\BlogPost;
 
+
 class PostController extends Controller
 {
     /**
@@ -47,6 +48,23 @@ class PostController extends Controller
         **Due the use App\BlogPost; the name space App is not needed before BlogPost** */ 
     }
 
+    public function create()//This function renders a form
+    {
+        return view('posts.create');
+    }
+
+    public function store(Request $request)/*store() saves the values captured by the form.
+    We are passing an argument of object type Request and it's instance
+    is stored in variable $request*/
+    {
+        /*dd($request->all());with Request object method all() we read(and render) 
+        all the sent values from the form, when we press Create! button*/
+
+        $title = $request->input('title');//reads attribute 'title' and store it in variable $title
+        $content = $request->input('content');////reads attribute 'content' and store it in variable $content
+
+        dd($title, $content);//render values
+    }
 
 
 

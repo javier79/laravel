@@ -14,6 +14,7 @@
         {{-- Code below was eliminated due it is going into a separate Controller class to clean up the code --}}
         {{-- <li><ahref="route('blog-post',['id'=>1]) ">Blog post 1</a></li>--}}{{-- As our URL use a parameter
             the parameter is passed in an associative array --}}
+        <li><a href="{{ route('posts.create') }}">Add Blog Post</a></li>
 
         {{--<li><a href="/">Home</a></li> This is a reference with a hardcoded URL
         above{{ route('home') }}syntax allows for the use of names as reference ()to generate URLs)--}}
