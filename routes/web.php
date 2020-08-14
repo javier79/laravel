@@ -34,7 +34,7 @@ The logic for this route was moved to HomeController.php*/
 
 
 Route::resource('posts', 'PostController')->only(['index', 'show']);
-/*As we only want to display their list of the posts and an individual blog post.
+/*As we only want to display the list of the posts and an individual blog post.
 since we have all these methods and the routes are ultimately generated we can
 call another method to chain on other methods on the resource method and the method name is only() and
 it accepts an array.So now you can specify which of those routes you want.So you only use the suffix after the resource name.

@@ -9,7 +9,9 @@
                 <h3>
                     <a href="{{ route('posts.show', ['post'=>$post->id]) }}">{{ $post->title }}</a>
                     {{--'post.show' is the name of the route as per route:list. Parameter key 'post' 
-                    from route:list URI(.../{post}) and $post(var from @forelse clause above)->id(parameter) --}}
+                    from route:list URI(.../{post}) and $post(var from @forelse clause above)->id(parameter).
+                    ['post'=>$post->id]('post' key references object(record)stored in $post which is accessing 
+                    it's attribute id). {{ $post->title }}(render's attribute title)--}}
                 </h3>{{-- here we are echoing/accessing the model attributes
                     or the columns of the database. --}}
             </p>
