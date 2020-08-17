@@ -20,6 +20,12 @@
         above{{ route('home') }}syntax allows for the use of names as reference ()to generate URLs)--}}
 
     </ul>
+@if(session()->has('status')){{-- if the session have key 'status'(guess function returns: TRUE) --}}
+    <p style="color:green">
+        {{ session()->get('status') }}{{-- echo the string 'Blog post was created!' referenced 
+        by key 'status' (see PostController.php)--}}
+    </p>@endif
+
     @yield('content'){{-- This directive is the reference for the content between 
         @section('content')/@endsection (on contact and home pages(templates)) and points to the tags where
         their content will display when the layout template is extended to each page(ex:home/contact pages 

@@ -24,7 +24,7 @@ class HomeController extends Controller
        return view('contact');
     }
 
-    public function blogPost($id, $welcome = 1)
+    public function blogPost($id, $welcome = 1)//function not in use in the present state of the project.branch:session_flash_messages
     {
         $pages = [//$pages is an associative array(that consist of a key referencing a value like a dictionary)
             1 => [
@@ -42,6 +42,6 @@ class HomeController extends Controller
     as an array(associative). We pass an associative array with reference name 'data' to $pages[$id],
     $id as our index for $pages array.*/
        
-    }
+    }   
 }
 

@@ -33,8 +33,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id)//Request instance $request is pass when we are doing a reflash();
     {
+        //$request->session()->reflash();// this keep the message after one more Request
         return view('posts.show',['post'=> BlogPost::findOrFail($id)]);
          /*posts.show(is the reference for posts folder and show(view))  
         The parameter is an associative array, 'post' is an arbitrary key name 
@@ -58,15 +59,20 @@ class PostController extends Controller
     is stored in variable $request*/
     {
        $blogPost = new BlogPost();//Creating a new model(record)
-       $blogPost->title = $request->input('title');//$request reads form input and $blogPost access it's attribute title column and writes to it
-       $blogPost->content = $request->input('content');//$request reads form input and $blogPost access it's attribute content column and writes to it
-       $blogPost->save();//save what been written on columns and generates an id for the new record
+       $blogPost->title = $request->input('title');//$request reads form input then $blogPost access it's attribute title column and store form input(data) in memory.
+       $blogPost->content = $request->input('content');//$request reads form input then $blogPost access it's attribute title column and store form input(data) in memory.
+       $blogPost->save();//what was in memory is stored on DB(written to disk) columns, also generates an id for the new record.
+
+       $request->session()->flash('status', 'Blog post was created!');/*As i understand at the time object $request
+       access it's method session() which access it's method flash(). 'status' is an arbitrary key for string 'Blog post was
+       created'. */
 
        return redirect()->route('posts.show', ['post' => $blogPost->id]);
+       //'post'(from URI parameter posts/{post}) references $blogPost attribute id
        /*Once saved redirects to posts.show view(using as parameter the already generated id for the new record
         and renders the new record) also when we navigate to http://laravel.test/posts shows the title
         column with the added input.
-       'post'(from URI parameter posts/{post}) references $blogPost attribute id*/
+       */
 
 
     }
