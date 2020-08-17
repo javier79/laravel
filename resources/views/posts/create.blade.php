@@ -12,6 +12,17 @@
         <label>Content</label>
         <input type="text" name="content"/>
      </p>
+
+     @if($errors->any()){{-- Check notebook notes, $errors is a session variable(available to all views)
+      this variable 'errors'live in function handle() from Middleware\ShareErrorsFromSession) --}}
+      <div>
+         <ul>
+            @foreach($errors->all() as $error)
+               <li>{{ $error }}</li>
+            @endforeach
+         </ul>
+      </div>
+      @endif
     
      <button type="submit">Create!</button>
     </form>

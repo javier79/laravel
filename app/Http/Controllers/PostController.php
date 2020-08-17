@@ -59,8 +59,9 @@ class PostController extends Controller
     is stored in variable $request*/
     {
         $validatedData = $request->validate([//we are assigning the result of function validate to $validatedData. validate() belongs to object $request instance.
-            'title' => 'required|max:100',//'title' refers to input type textbox on http://laravel.test/posts/create and not the column in DB, here is established the the field is required and limited to 100 characters.
-            'content' => 'required'//same as above.
+            'title' => 'bail|min:5|required|max:100',//'title' refers to input type textbox on http://laravel.test/posts/create and not the column in DB, here is established the the field is required and limited to 100 characters.
+            //if we add bail whenever the first rule fails, it won't proceed to validate the others.
+            'content' => 'required|min:10'//same as above.
         ]);//Now with this rule if fields are left blank and submited the page will redirect to http://laravel.test/posts/create.
 
        $blogPost = new BlogPost();//Creating a new model(record)
