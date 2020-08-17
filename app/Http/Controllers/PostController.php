@@ -58,6 +58,11 @@ class PostController extends Controller
     We are passing an argument of object type Request and it's instance
     is stored in variable $request*/
     {
+        $validatedData = $request->validate([//we are assigning the result of function validate to $validatedData. validate() belongs to object $request instance.
+            'title' => 'required|max:100',//'title' refers to input type textbox on http://laravel.test/posts/create and not the column in DB, here is established the the field is required and limited to 100 characters.
+            'content' => 'required'//same as above.
+        ]);//Now with this rule if fields are left blank and submited the page will redirect to http://laravel.test/posts/create.
+
        $blogPost = new BlogPost();//Creating a new model(record)
        $blogPost->title = $request->input('title');//$request reads form input then $blogPost access it's attribute title column and store form input(data) in memory.
        $blogPost->content = $request->input('content');//$request reads form input then $blogPost access it's attribute title column and store form input(data) in memory.
