@@ -60,12 +60,10 @@ class PostController extends Controller
     We are passing class StorePost that inherit class FormRequest methods and attributes and we are creating an instance of StorePost and storing it in $request*/
     {
        $validatedData = $request->validated();//our rules were moved to StorePost.php and change validate() to validated()(this function is inherited from class FormRequest). If fields are left blank and submited the page will redirect to http://laravel.test/posts/create.
-       
-       dd($validatedData);//Displays content of $validatedData but not in a view
-       $blogPost = new BlogPost();//Creating a new model(record)
-       $blogPost->title = $request->input('title');//$request reads form input then $blogPost access it's attribute title column and store form input(data) in memory.
-       $blogPost->content = $request->input('content');//$request reads form input then $blogPost access it's attribute title column and store form input(data) in memory.
-       $blogPost->save();//what was in memory is stored on DB(written to disk) columns, also generates an id for the new record.
+       $blogPost = BlogPost::create($validatedData);/*We are calling static method create() that creates and save a new model(record),
+       validatedData is an array containing the validated data, 
+       also we are defining the attributes(in BlogPost class) we are mass assigning(meaning not individually) in this case only the title and content attributes
+       to do that it must be specified in BlogPost.php model*/
 
        $request->session()->flash('status', 'Blog post was created!');/*As i understand at the time object $request
        access it's method session() which access it's method flash(). 'status' is an arbitrary key for string 'Blog post was
