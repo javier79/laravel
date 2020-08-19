@@ -57,10 +57,9 @@ class PostController extends Controller
     }
 
     public function store(StorePost $request)/*store() saves the values captured by the form to the DB.
-    We are passing an argument of object type StorePost that is our instance of Request class and it's instance
-    is stored in variable $request*/
+    We are passing class StorePost that inherit class FormRequest methods and attributes and we are creating an instance of StorePost and storing it in $request*/
     {
-       $validatedData = $request->validated();//our rules move to StorePost.php and change validate() to validated()
+       $validatedData = $request->validated();//our rules were moved to StorePost.php and change validate() to validated()(this function is inherited from class FormRequest). If fields are left blank and submited the page will redirect to http://laravel.test/posts/create.
        
        dd($validatedData);//Displays content of $validatedData but not in a view
        $blogPost = new BlogPost();//Creating a new model(record)
