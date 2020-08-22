@@ -14,6 +14,8 @@
                     it's attribute id). {{ $post->title }}(render's attribute title)--}}
                 </h3>{{-- here we are echoing/accessing the model attributes
                     or the columns of the database. --}}
+                
+                <a href="{{ route('posts.edit', ['post'=>$post->id]) }}"> Edit</a>{{-- Edit link on index --}}
             </p>
         @empty{{-- @forelse let us use @empty clause to display a message if the
             collection is found to be empty --}}
@@ -22,4 +24,4 @@
     @endsection('content')
 
     {{--The link for this view is laravel.test/posts, as i understand it's determined
-    by the URI in the route:list--}}
+    by the URI in the route:list--}} 

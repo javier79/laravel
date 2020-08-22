@@ -2,8 +2,11 @@
     @extends('layout')
 
     @section('content')
+
+    
     {{--The links for this view is http://laravel.test/posts/1 or http://laravel.test/posts/2  
     (/1 and /2 refers the primary key which is ID), as i understand it's determined by the URI in the route:list--}}
+        
         <h1>{{ $post-> title }}</h1>
         <p>{{ $post->content }}</p>
 

@@ -35,9 +35,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)//Request instance $request is pass when we are doing a reflash();
+    public function show($id)//remember $id is another reference to the argument in the Route (URI:posts/{post}), but you may name it as you wanted.
     {
-        //$request->session()->reflash();// this keep the message after one more Request
+
         return view('posts.show',['post'=> BlogPost::findOrFail($id)]);
          /*posts.show(is the reference for posts folder and show(view))  
         The parameter is an associative array, 'post' is an arbitrary key name 
@@ -57,8 +57,9 @@ class PostController extends Controller
     }
 
     public function store(StorePost $request)/*store() saves the values captured by the form to the DB.
-    We are passing class StorePost that inherit class FormRequest methods and attributes and we are creating an instance of StorePost and storing it in $request*/
-    {
+    We are passing class StorePost that inherit class FormRequest methods and attributes and 
+    we are creating an instance of StorePost and storing it in $request. Object instance $request stores the contents input forms on create view. */
+    {  
        $validatedData = $request->validated();//our rules were moved to StorePost.php and change validate() to validated()(this function is inherited from class FormRequest). If fields are left blank and submited the page will redirect to http://laravel.test/posts/create.
        $blogPost = BlogPost::create($validatedData);/*We are calling static method create() that creates and save a new model(record),
        validatedData is an array containing the validated data, 
@@ -78,8 +79,17 @@ class PostController extends Controller
 
 
     }
+    
+    public function edit($id)
+    {
+        $post = BlogPost::findOrFail($id);
+        return view('posts.edit', ['post'=>$post]);
+    }
 
+    public function update($id)//remember $id is another reference to the argument in the Route (URI:posts/{post}/edit), but you may name it as you wanted.
+    {
 
+    }
 
 
 
