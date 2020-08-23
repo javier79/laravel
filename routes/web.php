@@ -33,7 +33,7 @@ Rendering and behavior of page do not change.
 The logic for this route was moved to HomeController.php*/
 
 
-Route::resource('/posts', 'PostController')->except(['destroy']);/*Due we are now using most of the functions that came with the creation of PostController
+Route::resource('/posts', 'PostController');/*Due we are now using most of the functions that came with the creation of PostController
 we are specifying the ones we are not using, contrary to when we use only() to specified the method we wanted to use.*/
 /*As we only want to display the list of the posts and an individual blog post.
 since we have all these methods and the routes are ultimately generated we can
@@ -52,6 +52,9 @@ as you want enclosed in curly braces and separated by slash, optional parameter 
 also closure were removed and instead we are using HomeController.The @blogPost(function name at HomeController)
  Rendering and behavior of page do not change.*/
 //The logic for this route was moved to HomeController.php
+
+/*Due new actions needed ->except(['destroy']) was deleted, as now it will be part of the actions, 
+route list*/
 
 
 
