@@ -16,7 +16,15 @@
                     or the columns of the database. --}}
                 
                 <a href="{{ route('posts.edit', ['post'=>$post->id]) }}"> Edit</a>{{-- Edit link on index --}}
+
+                <form method="POST" action="{{ route('posts.destroy', ['post' => $post->id]) }}">
+                    @csrf{{-- This is a token to prevent exploits on the form, without it renders an error --}}
+                    @method('DELETE'){{-- method spoofing as html only manage method Get or POST, this will 
+                        handle the use of method DELETE(Route list) --}}
+
+                    <input type="submit" value="Delete!" />
             </p>
+
         @empty{{-- @forelse let us use @empty clause to display a message if the
             collection is found to be empty --}}
                 <p>No blog post yet!</p>

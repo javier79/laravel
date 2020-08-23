@@ -100,6 +100,17 @@ class PostController extends Controller
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
+    public function destroy(Request $request, $id)//He did not explain why he used Request instead of StorePost
+    {
+        $post = BlogPost::findOrFail($id);
+        $post->delete();
+
+        //BlogPost::destroy($id);This do the same as the code before
+
+        $request->session()->flash('status', 'Blog post was deleted!');//Check comments above
+        
+        return redirect()->route('posts.index');//Check comments above
+    }
 
 
 }
