@@ -68,7 +68,7 @@ class PostController extends Controller
 
        $request->session()->flash('status', 'Blog post was created!');/*As i understand at the time object $request
        access it's method session() which access it's method flash(). 'status' is an arbitrary key for string 'Blog post was
-       created'. */
+       created'. 'status' is a session variable so anytime on session where 'status' return true 'Blog post was created!' string will be rendere(see layout view) */
 
        return redirect()->route('posts.show', ['post' => $blogPost->id]);
        //'post'(from URI parameter posts/{post}) references $blogPost attribute id
@@ -86,9 +86,18 @@ class PostController extends Controller
         return view('posts.edit', ['post'=>$post]);
     }
 
-    public function update($id)//remember $id is another reference to the argument in the Route (URI:posts/{post}/edit), but you may name it as you wanted.
+    public function update(StorePost $request, $id)//remember $id is another reference to the argument in the Route (URI:posts/{post}/edit), but you may name it as you wanted.
     {
+        $post = BlogPost::findOrFail($id);/*As we are updating an existing model, this line fetch the model.
+        from de DB*/
+        $validatedData = $request->validated();//$request is only storing the data from the form not the model(whole record).
+        $post->fill($validatedData);/*fill() is used as we are filling the columns of an already existing model,
+        we already set the target attributes(column) on BlogPost.php */
+        $post->save();
+        $request->session()->flash('status', 'Blog post was updated!');/*rendered on layout view. 'status' is a session variable so anytime 
+        on session where 'status' return true 'Blog post was updated!' string will be rendered */
 
+        return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
 
