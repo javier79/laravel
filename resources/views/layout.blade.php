@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">{{-- reference to our css files --}}
     <title>Document</title>
 </head>
 <body>
@@ -30,5 +31,7 @@
         @section('content')/@endsection (on contact and home pages(templates)) and points to the tags where
         their content will display when the layout template is extended to each page(ex:home/contact pages 
         (templates))when displayed --}}
+
+    <script src="{{ mix('js/app.js') }}"></script>{{-- reference to our javascript files --}}
 </body>
 </html>
