@@ -6,7 +6,8 @@
      
          @include('posts._form')
     
-     <button type="submit">Create!</button>
+     <button type="submit" class="btn btn-primary btn-block">Create!</button>{{--class="btn btn-primary" button color and appearance, 
+     class="btn block" makes button large  --}}
     </form>
 
 @endsection

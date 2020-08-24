@@ -15,14 +15,15 @@
                 </h3>{{-- here we are echoing/accessing the model attributes
                     or the columns of the database. --}}
                 
-                <a href="{{ route('posts.edit', ['post'=>$post->id]) }}"> Edit</a>{{-- Edit link on index --}}
-
-                <form method="POST" action="{{ route('posts.destroy', ['post' => $post->id]) }}">
+                <a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>{{-- Edit link on index, class="btn btn-primary" colors the link and make it look like a bottom --}}
+                <form method="POST" class="fm-inline" action="{{ route('posts.destroy', ['post' => $post->id]) }}">{{--class="fm-inline" defined at app.scss affects only the delete button, 
+                    input tags behave as a block meaning they display in a new line,class="fm-inline" make it to display inline with the last displayed tag (<a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>) --}}
                     @csrf{{-- This is a token to prevent exploits on the form, without it renders an error --}}
                     @method('DELETE'){{-- method spoofing as html only manage method Get or POST, this will 
                         handle the use of method DELETE(Route list) --}}
 
-                    <input type="submit" value="Delete!" />
+                    <input type="submit" value="Delete!" class="btn btn-primary" />
+                </form>
             </p>
 
         @empty{{-- @forelse let us use @empty clause to display a message if the

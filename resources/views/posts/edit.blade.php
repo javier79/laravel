@@ -12,7 +12,8 @@
             resides, that we move to a single view due it shares partially some code
             with the create form, so that way we don't duplicate code --}}
     
-     <button type="submit">Update!</button>
+     <button type="submit" class="btn btn-primary btn-block">Update!</button>{{--class="btn btn-primary" button color and appearance, 
+     class="btn block" makes button large  --}}
     </form>
 
 @endsection 
