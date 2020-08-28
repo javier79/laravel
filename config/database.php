@@ -48,7 +48,7 @@ return [
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
-
+        //Below is the Configuration for out testing DB sqlite_testing 
         'sqlite_testing' => [
             'driver' => 'sqlite',
             'database' => ':memory:-',
