@@ -14,8 +14,8 @@ class AddTitleContentToBlogpostsTable extends Migration
     public function up()
     {
         Schema::table('blogposts', function (Blueprint $table) {
-            $table->string('title');//string() is equivalent of VARCHAR(255)
-            $table->text('content');//text() is equivalent of TEXT
+            $table->string('title')->default('');//string() is equivalent of VARCHAR(255), we added a default value due our sqlite(testing DB)won't allow NULL values in NOT NULL defined columns(Cannot add a NOT NULL column with default value NULL)
+            $table->text('content')->default('');//text() is equivalent of TEXT, we added a default value due our sqlite(testing DB)won't allow NULL values in NOT NULL defined columns(Cannot add a NOT NULL column with default value NULL)
         });
     }
 

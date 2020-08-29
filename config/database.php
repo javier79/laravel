@@ -51,7 +51,7 @@ return [
         //Below is the Configuration for out testing DB sqlite_testing 
         'sqlite_testing' => [
             'driver' => 'sqlite',
-            'database' => ':memory:-',
+            'database' => ':memory:',
         ],
 
         'mysql' => [
