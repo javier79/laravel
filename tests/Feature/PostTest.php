@@ -57,9 +57,69 @@ class PostTest extends TestCase
         //Assert
         ->assertStatus(302)//Checking for successful redirect(302 is http code for successful redirect)
         ->assertSessionHas('status');/*test key name 'status' is present in the session found at
-        PostController($request->session()->flash('status', 'Blog post was updated!')*/
-        $this->assertEquals(session('status'), 'Blog post was created!');/*test if added/flash message text display as intended, session('status') reads 'status' value and compares to second parameter */ 
+        PostController($request->session()->flash('status', 'Blog post was updated!'), 'status' will be present
+        only when validation is ok*/
+        $this->assertEquals(session('status'), 'Blog post was created!');/*test if added/flash message text display 
+        as intended, session('status') reads 'status' value and compares to second parameter */ 
+    }
+
+    public function testStoreFail()
+    {
+        $params = [
+            'title'=>'x',
+            'content'=>'x'
+        ];
+
+        $this->post('/posts', $params)
+        ->assertStatus(302)
+        ->assertSessionHas('errors');//errors is another session variable as 'status'.
+
+        $messages = session('errors')->getMessages();/*variable session is present and getMessages fetch the errors
+        and store em at $messages*/
+
+        $this->assertEquals($messages['title'][0], 'The title must be at least 5 characters.');/*test if message text 
+        display as intended, $messages['title'][0](check messages in SECOND TERMINAL RUN AT THE END OF PAGE to see from
+        where did we get that assoc array) content($messages['title'][0]) is tested against the text on second parameter. */
+        $this->assertEquals($messages['content'][0], 'The content must be at least 10 characters.');
+
+
+        /*dd($messages->getMessages());***prints variable sessions errors, that session() read in the line above,
+        THIS LINE WAS USED TO FIND OUT THROUGH TERMINAL HOW TO ACCESS ERRORS MESSAGES READ BELOW*/
     }
 }
 
 //Reminder:In each test we are running all migrations
+//TERMINAL RUN  dd($messages)
+/*PS C:\xampp\htdocs\laravel> ./vendor/bin/phpunit
+PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
+
+..... ..Illuminate\Support\ViewErrorBag^ {#4107 ***ViewErrorBag is an object***
+  #bags: array:1 [***#bags is an object property which is also an array***
+    "default" => Illuminate\Support\MessageBag^ {#4108***To access #messages property(and it's content) 
+        we must search MessageBag on the API and it's function getMessages()***
+      #messages: array:2 [
+        "title" => array:1 [***"title" this is from the rules() in StorePost.php
+          0 => "The title must be at least 5 characters."
+        ]
+        "content" => array:1 [
+          0 => "The content must be at least 10 characters."
+        ]
+      ]
+      #format: ":message"
+    }
+  ]
+}*/
+
+
+//SECOND TERMINAL RUN AFTER  dd($messages->getMessages());
+/*PS C:\xampp\htdocs\laravel> ./vendor/bin/phpunit
+PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
+
+..... ..array:2 [
+  "title" => array:1 [
+    0 => "The title must be at least 5 characters."
+  ]
+  "content" => array:1 [
+    0 => "The content must be at least 10 characters."
+  ]
+]*/
