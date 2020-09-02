@@ -86,7 +86,7 @@ class PostTest extends TestCase
         /*dd($messages->getMessages());***prints variable sessions errors, that session() read in the line above,
         THIS LINE WAS USED TO FIND OUT THROUGH TERMINAL HOW TO ACCESS ERRORS MESSAGES READ BELOW*/
     }
-}
+
 
 //Reminder:In each test we are running all migrations
 //TERMINAL RUN  dd($messages)
@@ -123,3 +123,46 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
     0 => "The content must be at least 10 characters."
   ]
 ]*/
+
+
+  public function testUpdateValid()
+  {
+  
+  $post = new BlogPost();
+  $post->title = 'New title';
+  $post->content = 'Content of blog post';
+  $post->save(); 
+
+  $this->assertDatabaseHas('blog_posts', [
+    'title' => 'New title',
+    'content'=> 'Content of blog post'
+   ]);/*(EDIT) WE USED INSTEAD:  [
+    'title' => 'New title',
+    'content'=> 'Content of blog post'
+   ]*/
+   /*DUE SEEMS IN MY LARAVEL VERSION assertDatabaseHas() DOES NO WORKS WITH ARRAY OF ARRAYS($post->toArray())
+   HERE WE ARE ASSERTING THAT THE CREATED BLOGPOST EXIST*/
+
+   $params=[
+    'title'=> 'A new named title',
+    'content'=>'Content was changed'
+];
+
+   $this->put("/posts/{$post->id}", $params)/*/posts/{$post->id} as per Route:list we are simulating a form for 
+   updating(put request) or modified the blogpost that we created at the top of this testUpdateValid() and passing valid params*/
+        ->assertStatus(302)//A successful redirect is expected
+        ->assertSessionHas('status');//variable 'status' is expected to be in session
+
+        $this->assertEquals(session('status'), 'Blog post was updated!');
+        $this->assertDatabaseMissing('blog_posts', [
+          'title' => 'New title',
+          'content'=> 'Content of blog post'
+         ]);//Asserting that the original blogpost could not be found(as it was successfully updated)
+
+         $this->assertDatabaseHas('blog_posts', [
+          'title' => 'A new named title',
+          'content'=> 'Content was changed'
+         ]);//Asserting that the new 'title' and 'content' are present.
+  }
+
+}

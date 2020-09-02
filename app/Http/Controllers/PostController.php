@@ -89,8 +89,8 @@ class PostController extends Controller
     public function update(StorePost $request, $id)//remember $id is another reference to the argument in the Route (URI:posts/{post}/edit), but you may name it as you wanted.
     {
         $post = BlogPost::findOrFail($id);/*As we are updating an existing model, this line fetch the model.
-        from de DB*/
-        $validatedData = $request->validated();//$request is only storing the data from the form not the model(whole record).
+        from the DB*/
+        $validatedData = $request->validated();//$request is only storing in memory the data from the form.
         $post->fill($validatedData);/*fill() is used as we are filling the columns of an already existing model,
         we already set the target attributes(column) on BlogPost.php */
         $post->save();
@@ -111,6 +111,9 @@ class PostController extends Controller
         
         return redirect()->route('posts.index');//Check comments above
     }
+
+
+
 
 
 }
