@@ -21,10 +21,9 @@ class PostTest extends TestCase
     public function testSee1BlogPostWhenThereIs1()
     {
         //Arrange part(see cheat sheet), creating new model and asignin values to title and content columns
-        $post = new BlogPost();
-        $post->title = 'New title';
-        $post->content = 'Content of blog post';
-        $post->save();
+        $post = $this->createDummyBlogPost(); /*REMEMBER THIS FUNCTION LIVES public function testDelete()
+        THIS WAS DONE DUE WE REPEATED THAT BLOCK OF CODE(INSTANCING A BlogPost Object) in different functions here on 
+        the same class*/
 
         //Act
         $response = $this->get('/posts');
@@ -127,11 +126,9 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
 
   public function testUpdateValid()
   {
-  
-  $post = new BlogPost();
-  $post->title = 'New title';
-  $post->content = 'Content of blog post';
-  $post->save(); 
+    $post = $this->createDummyBlogPost(); /*REMEMBER THIS FUNCTION LIVES public function testDelete()
+    THIS WAS DONE DUE WE REPEATED THAT BLOCK OF CODE(INSTANCING A BlogPost Object) in different functions here on 
+    the same class*/
 
   $this->assertDatabaseHas('blog_posts', [
     'title' => 'New title',
@@ -165,4 +162,38 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
          ]);//Asserting that the new 'title' and 'content' are present.
   }
 
+  public function testDelete()
+  {
+    $post = $this->createDummyBlogPost();
+
+    $this->assertDatabaseHas('blog_posts', [
+      'title' => 'New title',
+      'content'=> 'Content of blog post'
+     ]);//Asserting that blogpost was store.
+     //REMEMBER THAT TUTORIAL USED $this->assertDatabaseHas('blog_posts', $post->toArray())
+
+    $this->delete("/posts/{$post->id}")/*delete verb does not need any parameters, only the
+    resource url*/
+         ->assertStatus(302)//A successful redirect is expected
+         ->assertSessionHas('status');//variable 'status' is expected to be in session
+
+    $this->assertEquals(session('status'), 'Blog post was deleted!');//Assert the displayed message
+
+    $this->assertDatabaseMissing('blog_posts',[
+      'title' => 'New title',
+      'content'=> 'Content of blog post'
+     ]);//Asserting that the original blogpost could not be found(as it was successfully deleted)
+     //REMEMBER THAT TUTORIAL USED $this->assertDatabaseMissing('blog_posts', $post->toArray())
+  }
+    private function createDummyBlogPost():BlogPost//function returns an BlogPost instance
+    {
+    $post = new BlogPost();
+    $post->title = 'New title';
+    $post->content = 'Content of blog post';
+    $post->save();  
+
+    return $post;
+    }
+ 
+  
 }
