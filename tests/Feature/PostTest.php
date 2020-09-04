@@ -185,7 +185,8 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
      ]);//Asserting that the original blogpost could not be found(as it was successfully deleted)
      //REMEMBER THAT TUTORIAL USED $this->assertDatabaseMissing('blog_posts', $post->toArray())
   }
-    private function createDummyBlogPost():BlogPost//function returns an BlogPost instance
+    private function createDummyBlogPost():BlogPost/*function returns a BlogPost instance
+    THIS FUNCTION IS USED BY SEVERAL FUNCTIONS INSIDE THE CLASS PostTest, that required to instance a model*/
     {
     $post = new BlogPost();
     $post->title = 'New title';
