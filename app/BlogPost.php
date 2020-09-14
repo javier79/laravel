@@ -10,4 +10,9 @@ class BlogPost extends Model
 
     protected $fillable = ['title', 'content'];/*This add a level of security as it won't let any malicious
     program to write in any other column*/
+
+    public function comments()
+    {
+        return $this->hasMany('App\Comment');
+    }
 }
