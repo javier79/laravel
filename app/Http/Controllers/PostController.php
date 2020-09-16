@@ -33,6 +33,7 @@ class PostController extends Controller
             }
         }
         dd(DB::getQueryLog());//to see al querys that were made.
+        FOR SHOWING THE PERFORMANCE IMPLICATIONS OF USING LAZY LOADING VS EAGER LOADING
         /******************************************************************************/
         return view('posts.index', ['posts' => BlogPost::all()]);
         /*posts.index(is the reference for posts folder and index(view))  
