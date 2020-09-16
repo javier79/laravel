@@ -8,6 +8,8 @@ use App\BlogPost;
 
 use App\Http\Requests\StorePost;
 
+use Illuminate\Support\Facades\DB;
+
 
 class PostController extends Controller
 {
@@ -18,6 +20,20 @@ class PostController extends Controller
      */
    public function index()
     {
+        /*FOR SHOWING THE PERFORMANCE IMPLICATIONS OF USING LAZY LOADING VS EAGER LOADING
+        DB::connection()->enableQueryLog();/*This instruction call the current connection and enable
+        query log, it enables the login of all querys that are done by laravel, so that every time a query is done
+        it's logged
+
+        //$posts = BlogPost::all();//for lazy loading, run querys individually is slower
+        $posts = BlogPost::with('comments')->get();//for eager loading, run querys on sets and is faster
+        foreach ($posts as $post){//this line iterates over all blogpost
+            foreach($post->comments as $comment){//iterates over all blogpost comments
+                echo $comment->content;//echoes every comment of every blogpost
+            }
+        }
+        dd(DB::getQueryLog());//to see al querys that were made.
+        /******************************************************************************/
         return view('posts.index', ['posts' => BlogPost::all()]);
         /*posts.index(is the reference for posts folder and index(view))  
         The parameter is an associative array, 'posts' is an arbitrary key name 
@@ -35,7 +51,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)//remember $id is another reference to the argument in the Route (URI:posts/{post}), but you may name it as you wanted.
+    public function show($id) //remember $id is another reference to the argument in the Route (URI:posts/{post}), but you may name it as you wanted.
     {
 
         return view('posts.show',['post'=> BlogPost::findOrFail($id)]);
