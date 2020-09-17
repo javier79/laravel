@@ -36,7 +36,8 @@ class PostController extends Controller
         FOR SHOWING THE PERFORMANCE IMPLICATIONS OF USING LAZY LOADING VS EAGER LOADING
         /******************************************************************************/
         //return view('posts.index', ['posts' => BlogPost::all()]);
-        return view('posts.index', ['posts' => BlogPost::withCount('comments')->get()]
+        return view('posts.index', ['posts' => BlogPost::withCount('comments')->get()]/*fetching
+        all blogposts with comments_count value.*/
     );
         /*posts.index(is the reference for posts folder and index(view))  
         The parameter is an associative array, 'posts' is an arbitrary key name 
