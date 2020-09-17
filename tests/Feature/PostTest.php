@@ -27,9 +27,10 @@ class PostTest extends TestCase
 
         //Act
         $response = $this->get('/posts');
-
+        
         //Assert
         $response->assertSeeText('New title');
+        $response->assertSeeText('No comments yet!');
 
         $this->assertDatabaseHas('blog_posts', [//check table 'blog_post' if attribute title contains value 'New title'
             'title'=> 'New title'
@@ -157,8 +158,8 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
          ]);//Asserting that the original blogpost could not be found(as it was successfully updated)
 
          $this->assertDatabaseHas('blog_posts', [
-          'title' => 'A new named title',
-          'content'=> 'Content was changed'
+          'title' => 'A new named title'
+          //'content'=> 'Content was changed'
          ]);//Asserting that the new 'title' and 'content' are present.
   }
 

@@ -14,6 +14,12 @@
                     it's attribute id). {{ $post->title }}(render's attribute title)--}}
                 </h3>{{-- here we are echoing/accessing the model attributes
                     or the columns of the database. --}}
+
+                @if($post->comments_count){{-- if test true, meaning the property contains a number larger than 0 --}}
+                    <p>{{ $post->comments_count }} comments</p>{{-- echoes the number followed by the text comments --}}
+                @else
+                    <p>No comments yet!</p>{{-- if if test false --}}
+                @endif
                 
                 <a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>{{-- Edit link on index, class="btn btn-primary" colors the link and make it look like a bottom --}}
                 <form method="POST" class="fm-inline" action="{{ route('posts.destroy', ['post' => $post->id]) }}">{{--class="fm-inline" defined at app.scss affects only the delete button, 

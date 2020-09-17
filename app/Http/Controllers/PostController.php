@@ -35,7 +35,9 @@ class PostController extends Controller
         dd(DB::getQueryLog());//to see al querys that were made.
         FOR SHOWING THE PERFORMANCE IMPLICATIONS OF USING LAZY LOADING VS EAGER LOADING
         /******************************************************************************/
-        return view('posts.index', ['posts' => BlogPost::all()]);
+        //return view('posts.index', ['posts' => BlogPost::all()]);
+        return view('posts.index', ['posts' => BlogPost::withCount('comments')->get()]
+    );
         /*posts.index(is the reference for posts folder and index(view))  
         The parameter is an associative array, 'posts' is an arbitrary key name 
         (referencing BlogPost::all() value in the associative array) and it's value(instance object)will be stored in the variable 
