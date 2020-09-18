@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 //use Illuminate\Foundation\Testing\WithFaker;tutorial not using them at the time
 use Tests\TestCase;
 use App\BlogPost;
+use App\Comment;
 
 class PostTest extends TestCase
 {
@@ -18,7 +19,7 @@ class PostTest extends TestCase
         $response->assertSeeText('No blog post yet!');
     }
 
-    public function testSee1BlogPostWhenThereIs1()
+    public function testSee1BlogPostWhenThereIs1WithNoComments()
     {
         //Arrange part(see cheat sheet), creating new model and asignin values to title and content columns
         $post = $this->createDummyBlogPost(); /*REMEMBER THIS FUNCTION LIVES public function testDelete()
@@ -37,6 +38,21 @@ class PostTest extends TestCase
         ]);
 
 
+    }
+
+    public function testSee1BlogPostWithComments()
+    {
+     //Arrange
+     $post = $this->createDummyBlogPost(); 
+     factory(Comment::class, 4)->create([/*Comment::class is same as App\Comments, second parameter :
+      4 is the amount of models to be generated(4 comments) assoc to one(blogpost)*/
+       'blog_post_id' => $post->id
+     ]);
+
+     //Act
+     $response = $this->get('/posts');
+
+     $response->assertSeeText('4 comments');
     }
 
     public function testStoreValid()
