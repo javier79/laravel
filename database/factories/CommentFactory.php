@@ -8,6 +8,8 @@ use Faker\Generator as Faker;
 instance*/
 $factory->define(Comment::class, function (Faker $faker) {
     return [
-        'content'=>$faker->text//'content' is our column where Faker will generate some text
+        'content'=>$faker->text/*'content' is our column where Faker will generate some text
+        when we use tinker command and on test command genarate dummy text that we don't display as it runs
+        in our sqlite DB for testing */
     ];
 });

@@ -149,7 +149,7 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
 
   $this->assertDatabaseHas('blog_posts', [
     'title' => 'New title',
-    'content'=> 'Content of blog post'
+    'content'=> 'Content of the blog post'
    ]);/*(EDIT) WE USED INSTEAD:  [
     'title' => 'New title',
     'content'=> 'Content of blog post'
@@ -170,7 +170,7 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
         $this->assertEquals(session('status'), 'Blog post was updated!');
         $this->assertDatabaseMissing('blog_posts', [
           'title' => 'New title',
-          'content'=> 'Content of blog post'
+          'content'=> 'Content of the blog post'
          ]);//Asserting that the original blogpost could not be found(as it was successfully updated)
 
          $this->assertDatabaseHas('blog_posts', [
@@ -185,7 +185,7 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
 
     $this->assertDatabaseHas('blog_posts', [
       'title' => 'New title',
-      'content'=> 'Content of blog post'
+      'content'=> 'Content of the blog post'
      ]);//Asserting that blogpost was store.
      //REMEMBER THAT TUTORIAL USED $this->assertDatabaseHas('blog_posts', $post->toArray())
 
@@ -198,19 +198,22 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
 
     $this->assertDatabaseMissing('blog_posts',[
       'title' => 'New title',
-      'content'=> 'Content of blog post'
+      'content'=> 'Content of the blog post'
      ]);//Asserting that the original blogpost could not be found(as it was successfully deleted)
      //REMEMBER THAT TUTORIAL USED $this->assertDatabaseMissing('blog_posts', $post->toArray())
   }
     private function createDummyBlogPost():BlogPost/*function returns a BlogPost instance
     THIS FUNCTION IS USED BY SEVERAL FUNCTIONS INSIDE THE CLASS PostTest, that required to instance a model*/
     {
-    $post = new BlogPost();
-    $post->title = 'New title';
-    $post->content = 'Content of blog post';
-    $post->save();  
+      //Block of code commented to demonstrate factory states as below
+    //$post = new BlogPost();
+    //$post->title = 'New title';
+    //$post->content = 'Content of blog post';
+   // $post->save();  
 
-    return $post;
+    return factory(BlogPost::class)->states('new-title')->create();/*this calls state 'new-title'
+    defined in BlogPostFactory.php*/
+    //return $post;
     }
  
   
