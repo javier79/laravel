@@ -20,6 +20,20 @@
         @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 5){{-- For more info on Carbon library go to cheat sheet --}}
             <strong>New!</strong> 
         @endif
+
+        <h4>Comments</h4>
+        {{-- Displaying comments for blogposts --}}
+        @forelse($post->comments as $comment)
+        <p>
+            {{ $comment->content }}, 
+        </p>
+        <p class="muted-text">
+            added {{ $comment->created_at->diffForHumans() }}
+        </p>
+        @empty
+        <p>No comments yet!</p>
+
+        @endforelse
     @endsection('content')
 
 

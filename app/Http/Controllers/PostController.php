@@ -57,8 +57,12 @@ class PostController extends Controller
      */
     public function show($id) //remember $id is another reference to the argument in the Route (URI:posts/{post}), but you may name it as you wanted.
     {
-
-        return view('posts.show',['post'=> BlogPost::findOrFail($id)]);
+        return view('posts.show',[
+            'post'=> BlogPost::with('comments')->findorFail($id)
+            ]);
+        /*return view('posts.show',['post'=> BlogPost::findOrFail($id)]);/*findorFail() 
+        redirects to page 404, if do not find the record. We commented the line above as we
+        will be adding a comment list to blogpost with assoc comments*/
          /*posts.show(is the reference for posts folder and show(view))  
         The parameter is an associative array, 'post' is an arbitrary key name 
         (referencing BlogPost::findOrFail($id) value in the associative array) and it's value(instance object)will be stored in the variable 
