@@ -56,5 +56,6 @@ also closure were removed and instead we are using HomeController.The @blogPost(
 /*Due new actions needed ->except(['destroy']) was deleted, as now it will be part of the actions, 
 route list*/
 
-
+Auth::routes();/*This will register all routes we need to show all those forms we see in the previous tutorials
+and handle login and registration. Run route list to see auth routes added */
 
