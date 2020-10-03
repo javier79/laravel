@@ -39,4 +39,10 @@ class LoginController extends Controller
         for all AuthenticatesUsers class actions except for logout that requires to be already authenticated */
 
     }
+/*THIS WAS OVERWRITES EMAIL AS USERNAME IN AuthenticatesUsers CLASS IN THIS CASE username will become 
+the user identification for authentication and not email*/
+    //public function username()
+    //{
+    //    return 'username';
+   // }
 }
