@@ -26,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';//RouteServiceProvider::HOME
+    protected $redirectTo = '/';//RouteServiceProvider::HOME Check notebook in guard component and how logg...branch
 
     /**
      * Create a new controller instance.
@@ -35,6 +35,8 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('logout');/*guest access not requiring authorization
+        for all AuthenticatesUsers class actions except for logout that requires to be already authenticated */
+
     }
 }
