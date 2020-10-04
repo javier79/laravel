@@ -1,4 +1,5 @@
   
+  
 @extends('layout')
 @section('content')
   <form method="POST" action="{{ route('login') }}">
@@ -43,3 +44,4 @@
   </form>
 @endsection('content')
 {{-- we basically copy and paste the code from the register view and edited it. --}}
+

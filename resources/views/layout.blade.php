@@ -15,7 +15,30 @@
             <a class="p-2 text-dark" href="{{ route('home') }}">Home</a>
             <a class="p-2 text-dark" href="{{ route('contact') }}">Contact</a>
             <a class="p-2 text-dark" href="{{ route('posts.index') }}">Blog Posts</a>
-            <a class="p-2 text-dark" href="{{ route('posts.create') }}">Add Blog Post</a>
+            <a class="p-2 text-dark" href="{{ route('posts.create') }}">Add</a>
+
+            @guest{{-- displays for unregistered user --}}
+                @if (Route::has('register')){{-- if session have register, meaning there is no previous session in a cookie --}}
+                    <a class="p-2 text-dark" href="{{ route('register') }}">Register</a>
+                @endif{{-- displays for registered user --}}
+                <a class="p-2 text-dark" href="{{ route('login') }}">Login</a>
+            @else{{-- displays for logged in users --}}
+                <a class="p-2 text-dark" href="{{ route('logout') }}"                    
+                    onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                    >Logout</a>{{-- due  route('logout')
+                method is POST we can not use a direct link, most use a form. Javas Script: if click is made
+                the default behavior is halt, gets form and submit it. Observe we are calling the form below
+                that have no text fields as anyway it would not be displayed 
+                it simply execute the action of login out the user when the Logout link is clicked,
+                it does not show anything the page redirects to home again and the previous
+                link that when user was logged in displayed as logout now displays login  --}}
+
+                <form id="logout-form" action={{ route('logout') }} method="POST"
+                    style="display: none;">{{-- we are not displaying the form we only wan the POST
+                        request to be made for this form--}}
+                    @csrf
+                </form>
+            @endguest
         </nav>
     </div>
 
