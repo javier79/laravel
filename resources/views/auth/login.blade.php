@@ -1,5 +1,3 @@
-  
-  
 @extends('layout')
 @section('content')
   <form method="POST" action="{{ route('login') }}">
@@ -31,7 +29,7 @@
 
     <div class="form-group">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" name="remember"{{-- This is related to protected function attemptLogin(Request $request) on AuthenticatesUsers class --}}
+          <input class="form-check-input" type="checkbox" name="remember"{{-- associated with attemptLogin() in AuthenticatesUsers.php --}}
             value="{{ old('remember') ? 'checked': '' }}">
 
           <label class="form-check-label" for="remember">

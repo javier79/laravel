@@ -9,13 +9,15 @@ command to crate controllers->php artisan make:controller HomeController*/
 it was previously in web.php, as we move it here
 it looks more organized and easier to work with*/
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 
 class HomeController extends Controller
 {
     public function home()
     {
+        /*dd(Auth::user());/*fetch the id() of currently athenticated user. Is rendered on laravel.test
+        user() fetch the model or record. check()returns true or false(for authentication)*/
         return view('home');
     }
 

@@ -25,8 +25,8 @@
             @else{{-- displays for logged in users --}}
                 <a class="p-2 text-dark" href="{{ route('logout') }}"                    
                     onclick="event.preventDefault();document.getElementById('logout-form').submit();"
-                    >Logout</a>{{-- due  route('logout')
-                method is POST we can not use a direct link, most use a form. Javas Script: if click is made
+                    >Logout({{ Auth::user()->name }})</a>{{-- Auth::user()->name, renders authenticated
+                        username--}} {{-- due  route('logout')method is POST we can not use a direct link, most use a form. Javas Script: if click is made
                 the default behavior is halt, gets form and submit it. Observe we are calling the form below
                 that have no text fields as anyway it would not be displayed 
                 it simply execute the action of login out the user when the Logout link is clicked,
