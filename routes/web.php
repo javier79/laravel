@@ -19,7 +19,8 @@ are first the address or URL('/') and second the closure(at this state of the pr
 
 
 
-Route::get('/', 'HomeController@home')->name('home');/*Route was updated (in branch controllers_basics) 
+Route::get('/', 'HomeController@home')->name('home');
+/*->middleware('auth')*//*Route was updated (in branch controllers_basics) 
 from(Route::view('/', 'home')->name('home');to Route::get('/', 'HomeController@home')->name('home');
 closure were removed and instead we are using HomeController.The @home(function name at HomeController) 
 Rendering and behavior of page do not change.

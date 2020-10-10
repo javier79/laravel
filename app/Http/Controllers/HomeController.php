@@ -16,8 +16,10 @@ class HomeController extends Controller
 {
     public function home()
     {
-        /*dd(Auth::user());/*fetch the id() of currently athenticated user. Is rendered on laravel.test
+        /*dd(Auth::check());/*fetch the id() of currently athenticated user. Is rendered on laravel.test
         user() fetch the model or record. check()returns true or false(for authentication)*/
+        //dd(Auth::id());
+       // dd(Auth::user());
         return view('home');
     }
 
