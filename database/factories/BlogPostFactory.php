@@ -18,7 +18,7 @@ $factory->define(BlogPost::class, function (Faker $faker) {
 $factory->state(App\BlogPost::class, 'new-title', function (Faker $faker){
     return [
      'title' => 'New title',
-     //'content' => 'Content of the blog post' Commented to demonstrate how the factory then generates dumy data when there is not a directive like this to overwrite factory
+     'content' => 'Content of the blog post'// Commented to demonstrate how the factory then generates dumy data when there is not a directive like this to overwrite factory
      /*This properties values will always be as defined here, and will not store dummy data */
     ];
 });

@@ -56,7 +56,7 @@ class PostTest extends TestCase
     }
 
     public function testStoreValid()
-    {
+    { 
         //Arrange
         /*$params refers to parameters. Below associative array wants to specify the scenario where 
         key 'title' and 'content' references a string that comply with the validation for both text fields.
@@ -67,12 +67,13 @@ class PostTest extends TestCase
         ];
         /*Here we are simulating an http request in the browser as if a form have been submitted,
         with the paramters requiring and modeling the state of the submitted data(validated/correct)*/
+        $this->actingAs($this->user())
         //Act
-        $this->post('/posts', $params)/*Redirects to the /post associated to $params values.post() verb
+            ->post('/posts', $params)/*Redirects to the /post associated to $params values.post() verb
         is used as we are simulating a form request, also needed to access assertStatus()/assertSessionHas()*/
         //Assert
-        ->assertStatus(302)//Checking for successful redirect(302 is http code for successful redirect)
-        ->assertSessionHas('status');/*test key name 'status' is present in the session found at
+            ->assertStatus(302)//Checking for successful redirect(302 is http code for successful redirect)
+            ->assertSessionHas('status');/*test key name 'status' is present in the session found at
         PostController($request->session()->flash('status', 'Blog post was updated!'), 'status' will be present
         only when validation is ok*/
         $this->assertEquals(session('status'), 'Blog post was created!');/*test if added/flash message text display 
@@ -86,9 +87,10 @@ class PostTest extends TestCase
             'content'=>'x'
         ];
 
-        $this->post('/posts', $params)
-        ->assertStatus(302)
-        ->assertSessionHas('errors');//errors is another session variable as 'status'.
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
+            ->assertStatus(302)
+            ->assertSessionHas('errors');
 
         $messages = session('errors')->getMessages();/*variable session is present and getMessages fetch the errors
         and store em at $messages*/
@@ -147,7 +149,7 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
     THIS WAS DONE DUE WE REPEATED THAT BLOCK OF CODE(INSTANCING A BlogPost Object) in different functions here on 
     the same class*/
 
-  $this->assertDatabaseHas('blog_posts', [
+    $this->assertDatabaseHas('blog_posts', [
     'title' => 'New title',
     'content'=> 'Content of the blog post'
    ]);/*(EDIT) WE USED INSTEAD:  [
@@ -157,23 +159,23 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
    /*DUE SEEMS IN MY LARAVEL VERSION assertDatabaseHas() DOES NO WORKS WITH ARRAY OF ARRAYS($post->toArray())
    HERE WE ARE ASSERTING THAT THE CREATED BLOGPOST EXIST*/
 
-   $params=[
+    $params=[
     'title'=> 'A new named title',
     'content'=>'Content was changed'
 ];
-
-   $this->put("/posts/{$post->id}", $params)/*/posts/{$post->id} as per Route:list we are simulating a form for 
+    $this->actingAs($this->user())
+        ->put("/posts/{$post->id}", $params)/*/posts/{$post->id} as per Route:list we are simulating a form for 
    updating(put request) or modified the blogpost that we created at the top of this testUpdateValid() and passing valid params*/
         ->assertStatus(302)//A successful redirect is expected
         ->assertSessionHas('status');//variable 'status' is expected to be in session
 
-        $this->assertEquals(session('status'), 'Blog post was updated!');
-        $this->assertDatabaseMissing('blog_posts', [
+    $this->assertEquals(session('status'), 'Blog post was updated!');
+    $this->assertDatabaseMissing('blog_posts', [
           'title' => 'New title',
           'content'=> 'Content of the blog post'
          ]);//Asserting that the original blogpost could not be found(as it was successfully updated)
 
-         $this->assertDatabaseHas('blog_posts', [
+    $this->assertDatabaseHas('blog_posts', [
           'title' => 'A new named title'
           //'content'=> 'Content was changed'
          ]);//Asserting that the new 'title' and 'content' are present.
@@ -188,8 +190,8 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
       'content'=> 'Content of the blog post'
      ]);//Asserting that blogpost was store.
      //REMEMBER THAT TUTORIAL USED $this->assertDatabaseHas('blog_posts', $post->toArray())
-
-    $this->delete("/posts/{$post->id}")/*delete verb does not need any parameters, only the
+     $this->actingAs($this->user())  
+          ->delete("/posts/{$post->id}")/*delete verb does not need any parameters, only the
     resource url*/
          ->assertStatus(302)//A successful redirect is expected
          ->assertSessionHas('status');//variable 'status' is expected to be in session

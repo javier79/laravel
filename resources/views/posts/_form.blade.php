@@ -16,7 +16,8 @@ two input fields as well as the part displaying validation errors --}}
 
  <div class="form-group">{{--From bootstrap default settings <div class="form-group"> (needed for optimum spacing) --}}    
     <label>Content</label>
-    <input type="text" name="content" class="form-control" value="{{old('content', $post->content ?? null)}}"/>{{-- All textual <input>, <textarea>, and <select> elements with class .form-control have a width of 100%.
+    <input type="text" name="content" class="form-control" 
+         value="{{old('content', $post->content ?? null)}}"/>{{-- All textual <input>, <textarea>, and <select> elements with class .form-control have a width of 100%.
        Add class .form-control to all textual <input>, <textarea>, and <select> elements.--}}
  </div>
 
