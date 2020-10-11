@@ -14,12 +14,17 @@ class AddUserToBlogPostsTable extends Migration
     public function up()
     {
         Schema::table('blog_posts', function (Blueprint $table) {
-            $table->unsignedInteger('user_id');
+
             /*$table->unsignedInteger('user_id')->nullable();/*due we already have some records
             that won't have nothing in user_id and due the field can't be empty
             nullable would asign the value null to those existing record prior to
             the creation of the column, we ended taking out the nullable
             due we refresh DB and there will be no prior records*/
+            if (env('DB_CONNECTION') === 'sqlite_testing') {
+                $table->unsignedInteger('user_id')->default('0');
+            } else {
+                $table->unsignedInteger('user_id');
+            }
             $table->foreign('user_id')
                 ->references('id')->on('users');
         });
