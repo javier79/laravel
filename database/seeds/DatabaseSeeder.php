@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         factory(App\User::class)->states('john-doe')->create();//call state on UserFactory
 
-        factory(App\User::class, 20)->create();/*generates(UserFactory.php) and add 20 records, we keep
+        factory(App\User::class, 20)->create();/*generates(check UserFactory.php) and add 20 records, we keep
         the hard coded record we create in the run()*/
     }
 
