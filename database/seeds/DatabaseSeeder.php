@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         PRESS ON THE THE DROP DOWN ARROW AT THE LEFT IN THE BEGINNING 
         OF THE BLOCK*/
 
-        factory(App\User::class)->states('john-doe')->create();
+        factory(App\User::class)->states('john-doe')->create();//call state on UserFactory
 
         factory(App\User::class, 20)->create();/*generates(UserFactory.php) and add 20 records, we keep
         the hard coded record we create in the run()*/

@@ -24,12 +24,14 @@ $factory->define(User::class, function (Faker $faker) {
         'email_verified_at' => now(),
         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         'remember_token' => Str::random(10),
-    ];
+    ];//As defined here note on DB that al users generated with above code, have the same password
 });
-
+//
 $factory->state(App\User::class, 'john-doe', function (Faker $faker) {
     return [
         'name' => 'John Doe',
         'email' => 'john@laravel.test',
     ];
 });
+/*Above is an example when you want to hard code some fields on a record, the rest of
+the fields are covered with the first block of code*/
