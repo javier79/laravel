@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+//use Illuminate\Support\Facades\DB; not in use
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -23,10 +23,29 @@ class DatabaseSeeder extends Seeder
         PRESS ON THE THE DROP DOWN ARROW AT THE LEFT IN THE BEGINNING 
         OF THE BLOCK*/
 
-        factory(App\User::class)->states('john-doe')->create();//call state on UserFactory
+        $doe=factory(App\User::class)->states('john-doe')->create();//call state on UserFactory
 
-        factory(App\User::class, 20)->create();/*generates(check UserFactory.php) and add 20 records, we keep
+        $else=factory(App\User::class, 20)->create();/*generates(check UserFactory.php) and add 20 records, we keep
         the hard coded record we create in the run()*/
+
+        //dd(get_class($doe),get_class($else));
+
+        $users = $else->concat([$doe]);//it puts on a single collection the above 20 users created plus the hard coded model(John Doe)
+       
+        /*The block of code below creates(but don't save, we are not using create() as we need 
+        to assign each model a user_id in order for each to be saved ) 50 blogposts models. 
+        each() let us iterate over each model. use ($users) due we need $users var data 
+        but it is out of closure function and scope we employ use. PLEASE CHECK NOTEBOOK II
+        ON BRANCH MODEL RELATION FACTORY INSIDE SEEDER*/
+        $posts = factory(App\BlogPost::class, 50)->make()->each(function($post) use ($users) {
+            $post->user_id = $users->random()->id;//assigns a random id(from users table column) to user_id column in blogposts table
+            $post->save();//saves
+        });
+
+        $comments = factory(App\Comment::class, 150)->make()->each(function ($comment) use ($posts) {
+            $comment->blog_post_id = $posts->random()->id;
+            $comment->save();
+        });
     }
 
 }
