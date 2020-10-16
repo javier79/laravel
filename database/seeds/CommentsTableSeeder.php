@@ -1,0 +1,25 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+class CommentsTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+            $posts = App\BlogPost::all();
+             /*The block of code below creates(but don't save, we are not using create() as we need 
+        to assign each model a blog_post_id in order for each to be saved ) 150 comments models. 
+        each() let us iterate over each model. use ($posts) due we need $posts var data 
+        but it is out of closure function and scope we employ USE. PLEASE CHECK NOTEBOOK II
+        ON BRANCH MODEL RELATION FACTORY INSIDE SEEDER and INDIVIDUAL SEEDERS CLASSES*/
+            factory(App\Comment::class, 150)->make()->each(function ($comment) use ($posts) {
+            $comment->blog_post_id = $posts->random()->id;
+            $comment->save();
+        });
+    }
+}
