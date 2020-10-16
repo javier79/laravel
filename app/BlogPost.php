@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BlogPost extends Model
 {
     //protected $table = 'blogposts';//defining custom name adding protected $table model property.
+
+    use SoftDeletes;
 
     protected $fillable = ['title', 'content'];/*This add a level of security as it won't let any malicious
     program to write in any other column*/
