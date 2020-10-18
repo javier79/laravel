@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;//added for soft deletes of comments
 
 class Comment extends Model
 {
+    use SoftDeletes;//added for soft deletes of comments
+
     /*remember we named it blogPost because when Laravel searches for foreign key
     converts blogPost to snake case blog_post and adds an underscore and an id
     so it will end as blog_post_id, this is how we named the column  containig the
