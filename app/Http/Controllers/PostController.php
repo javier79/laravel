@@ -9,7 +9,7 @@ use App\BlogPost;
 use App\Http\Requests\StorePost;
 
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -112,13 +112,27 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = BlogPost::findOrFail($id);
+        if(Gate::denies('update-post', $post)){
+            abort(403, "You can't edit this blog post");
+        }
+        
         return view('posts.edit', ['post'=>$post]);
+
+
     }
 
     public function update(StorePost $request, $id)//remember $id is another reference to the argument in the Route (URI:posts/{post}/edit), but you may name it as you wanted.
     {
         $post = BlogPost::findOrFail($id);/*As we are updating an existing model, this line fetch the model.
         from the DB*/
+
+        /*code below verifies if a user (whic is sent internally to function) can 
+        perform or not an action. In this case if not verified as owner of blogpost
+        is redirected to error 403 */
+        if(Gate::denies('update-post', $post)){
+            abort(403, "You can't edit this blog post");
+        }
+
         $validatedData = $request->validated();//$request is only storing in memory the data from the form.
         $post->fill($validatedData);/*fill() is used as we are filling the columns of an already existing model,
         we already set the target attributes(column) on BlogPost.php */

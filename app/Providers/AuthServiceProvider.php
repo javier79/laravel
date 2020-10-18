@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        'App\Model' => 'App\Policies\ModelPolicy',
     ];
 
     /**
@@ -25,6 +25,12 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('update-post',function($user, $post){
+           return $user->id == $post->user_id; 
+        });/*we are enabling the ability of updating a 
+        blogpost('update-post'), the closure params are the user and post that
+        we intend to verify*/
+
+        
     }
 }
