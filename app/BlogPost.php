@@ -19,6 +19,11 @@ class BlogPost extends Model
         return $this->hasMany('App\Comment');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     public static function boot()/*The static boot() method is automatically run whenever 
     a model is instantiated, so it is often an ideal place to add behavior, in this case
     we are defining the behavior that will happen when a blogpost is deleted(softdeleted)
