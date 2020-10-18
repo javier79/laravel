@@ -31,6 +31,11 @@ class AuthServiceProvider extends ServiceProvider
         blogpost('update-post'), the closure params are the user and post that
         we intend to verify*/
 
+
+        Gate::define('delete-post',function($user, $post){
+           return $user->id == $post->user_id; 
+        });
+
         
     }
 }

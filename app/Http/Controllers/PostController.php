@@ -112,10 +112,12 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = BlogPost::findOrFail($id);
-        if(Gate::denies('update-post', $post)){
-            abort(403, "You can't edit this blog post");
-        }
-        
+
+        $this->authorize('update-post', $post);//This simpler statement instead of Gate statement
+        //if(Gate::denies('update-post', $post)){//denies access to update post if not authorized
+            //abort(403, "You can't edit this blog post");
+        //}
+
         return view('posts.edit', ['post'=>$post]);
 
 
@@ -129,9 +131,10 @@ class PostController extends Controller
         /*code below verifies if a user (whic is sent internally to function) can 
         perform or not an action. In this case if not verified as owner of blogpost
         is redirected to error 403 */
-        if(Gate::denies('update-post', $post)){
-            abort(403, "You can't edit this blog post");
-        }
+        // if(Gate::denies('update-post', $post)){
+        //     abort(403, "You can't edit this blog post");//denies access to update post if not authorized
+        // }
+        $this->authorize('update-post', $post);//simpler statement instead of Gate statement above
 
         $validatedData = $request->validated();//$request is only storing in memory the data from the form.
         $post->fill($validatedData);/*fill() is used as we are filling the columns of an already existing model,
@@ -146,6 +149,11 @@ class PostController extends Controller
     public function destroy(Request $request, $id)//He did not explain why he used Request instead of StorePost
     {
         $post = BlogPost::findOrFail($id);
+
+        // if(Gate::denies('delete-post', $post)){
+        //     abort(403, "You can't delete this blog post");
+        // }
+        $this->authorize('delete-post', $post);
         $post->delete();
 
         //BlogPost::destroy($id);This do the same as the code before
