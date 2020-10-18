@@ -14,9 +14,13 @@ class AddCascadeDeleteToCommentsTable extends Migration
     public function up()
     {
         Schema::table('comments', function (Blueprint $table) {
+            if (!env('DB_CONNECTION') === 'sqlite_testing'){
             $table->dropForeign(['blog_post_id']);/*deleting foreignkey first putting
             the column name on brackets instruct the system to look for the name of the foreignkey
             associated to the column of that name*/
+            }
+
+            
             $table->foreign('blog_post_id')//This foreign key difinition(meaning from this line to onDelete()) responds to be able to implement onDelete()
             ->references('id')
             ->on('blog_posts')

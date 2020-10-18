@@ -151,7 +151,7 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
 
     $this->assertDatabaseHas('blog_posts', [
     'title' => 'New title',
-    'content'=> 'Content of the blog post'
+    //'content'=> 'Content of the blog post'
    ]);/*(EDIT) WE USED INSTEAD:  [
     'title' => 'New title',
     'content'=> 'Content of blog post'
@@ -187,7 +187,7 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
 
     $this->assertDatabaseHas('blog_posts', [
       'title' => 'New title',
-      'content'=> 'Content of the blog post'
+     // 'content'=> 'Content of the blog post'
      ]);//Asserting that blogpost was store.
      //REMEMBER THAT TUTORIAL USED $this->assertDatabaseHas('blog_posts', $post->toArray())
      $this->actingAs($this->user())  
@@ -197,12 +197,16 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
          ->assertSessionHas('status');//variable 'status' is expected to be in session
 
     $this->assertEquals(session('status'), 'Blog post was deleted!');//Assert the displayed message
-
-    $this->assertDatabaseMissing('blog_posts',[
+      /*Code below commented as we are testing for soft deletes not hard deletes */
+    //$this->assertDatabaseMissing('blog_posts',[
+      //'title' => 'New title',
+     // 'content'=> 'Content of the blog post'
+     //]);//Asserting that the original blogpost could not be found(as it was successfully deleted)
+     //REMEMBER THAT TUTORIAL USED $this->assertDatabaseMissing('blog_posts', $post->toArray()
+     $this->assertSoftDeleted('blog_posts',[
       'title' => 'New title',
-      'content'=> 'Content of the blog post'
-     ]);//Asserting that the original blogpost could not be found(as it was successfully deleted)
-     //REMEMBER THAT TUTORIAL USED $this->assertDatabaseMissing('blog_posts', $post->toArray())
+      //'content'=> 'Content of the blog post'
+     ]);
   }
     private function createDummyBlogPost():BlogPost/*function returns a BlogPost instance
     THIS FUNCTION IS USED BY SEVERAL FUNCTIONS INSIDE THE CLASS PostTest, that required to instance a model*/
