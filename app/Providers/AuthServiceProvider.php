@@ -35,6 +35,21 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('delete-post',function($user, $post){
            return $user->id == $post->user_id; 
         });
+        /**the before handler will run before both define handlers before it */
+        Gate::before(function ($user, $ability) {
+            if ($user->is_admin && in_array($ability, ['update-post'])) {
+                return true;/*returns true for any authenticated admin user, if this returns
+                false it checks above Gates. If i go to app and login under John Doe the only 
+                admin user til now, i can update and delete posts not being the author of 
+                blog posts.*/
+            }
+        });
+//Check notebookII notes for below code which was done to demo after handler
+        // Gate::after(function ($user, $ability, $result) {
+        //     if ($user->is_admin) {
+        //         return true;
+        //     }
+        // });
 
         
     }

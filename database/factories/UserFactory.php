@@ -31,6 +31,7 @@ $factory->state(App\User::class, 'john-doe', function (Faker $faker) {
     return [
         'name' => 'John Doe',
         'email' => 'john@laravel.test',
+        'is_admin' => true
     ];
 });
 /*Above is an example when you want to hard code some fields on a record, the rest of
