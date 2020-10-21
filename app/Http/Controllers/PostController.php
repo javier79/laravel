@@ -82,6 +82,7 @@ class PostController extends Controller
 
     public function create()//This function renders a form
     {
+        //$this->authorize('posts.create'); //this is a demo for the posts.create Policies function
         return view('posts.create');
     }
 
@@ -113,7 +114,7 @@ class PostController extends Controller
     {
         $post = BlogPost::findOrFail($id);
 
-        $this->authorize('update-post', $post);//This simpler statement instead of Gate statement
+        $this->authorize('posts.update', $post);//This simpler statement instead of Gate statement
         //if(Gate::denies('update-post', $post)){//denies access to update post if not authorized
             //abort(403, "You can't edit this blog post");
         //}
@@ -134,7 +135,7 @@ class PostController extends Controller
         // if(Gate::denies('update-post', $post)){
         //     abort(403, "You can't edit this blog post");//denies access to update post if not authorized
         // }
-        $this->authorize('update-post', $post);//simpler statement instead of Gate statement above
+        $this->authorize('posts.update', $post);//simpler statement instead of Gate statement above
 
         $validatedData = $request->validated();//$request is only storing in memory the data from the form.
         $post->fill($validatedData);/*fill() is used as we are filling the columns of an already existing model,
@@ -153,7 +154,7 @@ class PostController extends Controller
         // if(Gate::denies('delete-post', $post)){
         //     abort(403, "You can't delete this blog post");
         // }
-        $this->authorize('delete-post', $post);
+        $this->authorize('posts.delete', $post);
         $post->delete();
 
         //BlogPost::destroy($id);This do the same as the code before
