@@ -53,7 +53,7 @@ class BlogPostPolicy
      */
     public function update(User $user, BlogPost $blogPost)
     {
-        //dd('Updating!');
+        dd('Updating!');
         return $user->id == $blogPost->user_id;/*pasted and edited from Gate statements on
         AuthServiceProvider.php*/
     }
@@ -67,7 +67,7 @@ class BlogPostPolicy
      */
     public function delete(User $user, BlogPost $blogPost)
     {
-        //dd('Deleting!');
+        dd('Deleting');
         return $user->id == $blogPost->user_id;/*pasted and edited from Gate statements on
         AuthServiceProvider.php*/
     }

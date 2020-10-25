@@ -13,7 +13,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        'App\Model' => 'App\Policies\ModelPolicy',//
+        'App\BlogPost' => 'App\Policies\BlogPostPolicy'
     ];
 
     /**
@@ -23,7 +24,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
+        $this->registerPolicies();/**this tells Laravel which policy to use for which model  */
 
         // Gate::define('update-post',function($user, $post){
         //    return $user->id == $post->user_id; 
@@ -41,7 +42,7 @@ class AuthServiceProvider extends ServiceProvider
         // and the method name(update) */
         // Gate::define('posts.delete', 'App\Policies\BlogPostPolicy@delete');
 
-        Gate::resource('posts', 'App\Policies\BlogPostPolicy');
+        //Gate::resource('posts', 'App\Policies\BlogPostPolicy');
         /** above access: posts.create, posts.view, posts.update, posts.delete */
 
     
