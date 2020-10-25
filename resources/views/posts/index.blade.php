@@ -16,7 +16,8 @@
                     or the columns of the database. --}}
                 <p class="text-muted">
                     Added {{ $post->created_at->diffForHumans() }}
-                    by {{ $post->user->name }}
+                    by {{ $post->user->name }}{{-- FOR THIS TO WORK A RELATION BETWEEN User.php and BlogPost.php 
+                        must be established check those classes --}}
                 </p>
 
                 @if($post->comments_count){{-- if test true, meaning the property contains a number larger than 0 --}}
@@ -25,7 +26,16 @@
                     <p>No comments yet!</p>{{-- if if test false --}}
                 @endif
                 
+                @can('update', $post){{-- allows diplay of edit button to author of blog post, this 
+                    is checking i someone is allowed to edit --}}
                 <a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>{{-- Edit link on index, class="btn btn-primary" colors the link and make it look like a bottom --}}
+                @endcan
+
+                {{-- @cannot('delete', $post) SHOWS MESSAGE 
+                <p>You can't delete this post</p>
+                @endcannot --}}
+                @can('delete', $post){{-- allows diplay of delete button to author of blog post
+                    this is checking i someone is allowed to delete --}}
                 <form method="POST" class="fm-inline" action="{{ route('posts.destroy', ['post' => $post->id]) }}">{{--class="fm-inline" defined at app.scss affects only the delete button, 
                     input tags behave as a block meaning they display in a new line,class="fm-inline" make it to display inline with the last displayed tag (<a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>) --}}
                     @csrf{{-- This is a token to prevent exploits on the form, without it renders an error --}}
@@ -34,6 +44,7 @@
 
                     <input type="submit" value="Delete!" class="btn btn-primary" />
                 </form>
+                @endcan
             </p>
 
         @empty{{-- @forelse let us use @empty clause to display a message if the
