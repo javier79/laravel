@@ -28,24 +28,11 @@ class HomeController extends Controller
        return view('contact');
     }
 
-    public function blogPost($id, $welcome = 1)//function not in use in the present state of the project.branch:session_flash_messages
+    public function secret()
     {
-        $pages = [//$pages is an associative array(that consist of a key referencing a value like a dictionary)
-            1 => [
-                'title' => 'from page 1',
-            ],
-            2 => [
-                'title' => 'from page 2',
-            ],
-        ];
-        $welcomes = [1 => 'Hello', 2 => 'Welcome to '];
-    
-        return view('blog-post',['data'=> $pages[$id], 'welcome' => $welcomes[$welcome],]);
-    /*The first parameter for function view() is 
-    the view(or template).(Remember we already pass the URL in get()) and in the second parameter we are passing data(default parameter)
-    as an array(associative). We pass an associative array with reference name 'data' to $pages[$id],
-    $id as our index for $pages array.*/
-       
-    }   
+        return view('secret');
+    }
+
+
 }
 

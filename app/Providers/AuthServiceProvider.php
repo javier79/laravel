@@ -24,8 +24,13 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        
         $this->registerPolicies();/**this tells Laravel which policy to use for which model  */
-
+        
+        Gate::define('home.secret', function ($user) {/*'home.secret' is the name ability that lives on HomeController
+            and the callback function is called to reference $user or the user we want to authenticate*/
+            return $user->is_admin;
+        });
         // Gate::define('update-post',function($user, $post){
         //    return $user->id == $post->user_id; 
         // });/*we are enabling the ability of updating a 

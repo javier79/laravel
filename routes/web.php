@@ -33,6 +33,9 @@ also closure were removed and instead we are using HomeController.The @contact(f
 Rendering and behavior of page do not change.
 The logic for this route was moved to HomeController.php*/
 
+Route::get('/secret', 'HomeController@secret')->name('secret')->middleware('can:home.secret');/*can works with laravel authorization system(same as @can)
+  this middleware works so that the route can only be accessed only by admin users*/
+
 
 Route::resource('/posts', 'PostController');/*Due we are now using most of the functions that came with the creation of PostController
 we are specifying the ones we are not using, contrary to when we use only() to specified the method we wanted to use.*/

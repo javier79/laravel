@@ -23,6 +23,14 @@ will display where(tags) @yield('content') is placed in layout template --}}
 @section('content') 
 <h1>Contact</h1>
 <p>Hello this is contact!</p>
+
+@can('home.secret'){{-- @can blade directives to check if current authenticated user has a given ability  --}}
+<p>
+  <a href="{{ route('secret') }}">
+    Go to special contact details!
+  </a>
+</p>
+@endcan
 @endsection
 {{-- </body>
 </html> --}}
