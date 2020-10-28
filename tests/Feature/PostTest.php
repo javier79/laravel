@@ -145,7 +145,8 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
 
   public function testUpdateValid()
   {
-    $post = $this->createDummyBlogPost(); /*REMEMBER THIS FUNCTION LIVES public function testDelete()
+    $user = $this->user();/**in order to match user id with blog post user_id we create the user first  */
+    $post = $this->createDummyBlogPost($user->id); /*REMEMBER THIS FUNCTION LIVES public function testDelete()
     THIS WAS DONE DUE WE REPEATED THAT BLOCK OF CODE(INSTANCING A BlogPost Object) in different functions here on 
     the same class*/
 
@@ -163,7 +164,7 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
     'title'=> 'A new named title',
     'content'=>'Content was changed'
 ];
-    $this->actingAs($this->user())
+    $this->actingAs($user)//Same user created on the beginning of this testUpdateValid() definition(above) 
         ->put("/posts/{$post->id}", $params)/*/posts/{$post->id} as per Route:list we are simulating a form for 
    updating(put request) or modified the blogpost that we created at the top of this testUpdateValid() and passing valid params*/
         ->assertStatus(302)//A successful redirect is expected
@@ -183,14 +184,15 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
 
   public function testDelete()
   {
-    $post = $this->createDummyBlogPost();
+    $user = $this->user();/**in order to match user id with blog post user_id we create the user first  */
+    $post = $this->createDummyBlogPost($user->id);
 
     $this->assertDatabaseHas('blog_posts', [
       'title' => 'New title',
      // 'content'=> 'Content of the blog post'
      ]);//Asserting that blogpost was store.
      //REMEMBER THAT TUTORIAL USED $this->assertDatabaseHas('blog_posts', $post->toArray())
-     $this->actingAs($this->user())  
+     $this->actingAs($user)//Same user created on the beginning of this testDelete() definition(above)  
           ->delete("/posts/{$post->id}")/*delete verb does not need any parameters, only the
     resource url*/
          ->assertStatus(302)//A successful redirect is expected
@@ -208,7 +210,7 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
       //'content'=> 'Content of the blog post'
      ]);
   }
-    private function createDummyBlogPost():BlogPost/*function returns a BlogPost instance
+    private function createDummyBlogPost($userId = null): BlogPost/*function returns a BlogPost instance
     THIS FUNCTION IS USED BY SEVERAL FUNCTIONS INSIDE THE CLASS PostTest, that required to instance a model*/
     {
       //Block of code commented to demonstrate factory states as below
@@ -217,7 +219,16 @@ PHPUnit 8.5.6 by Sebastian Bergmann and contributors.
     //$post->content = 'Content of blog post';
    // $post->save();  
 
-    return factory(BlogPost::class)->states('new-title')->create();/*this calls state 'new-title'
+    return factory(BlogPost::class)->states('new-title')->create(
+      [
+        'user_id' => $userId ?? $this->user()->id,
+        /**above if $userId value have a value not null(means testDelete()/testUpdateValid() make a call to
+          createDummyBlogPost() with arguments and this argument is user_id value)
+          if $userId value is null means other of the function make the call with default null parameter
+          and the value of user_id is $this->user()->id(random user generated id, different from user performing
+          the actions) */
+      ]
+    );/*this calls state 'new-title'
     defined in BlogPostFactory.php*/
     //return $post;
     }
