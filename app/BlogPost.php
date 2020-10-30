@@ -31,7 +31,7 @@ class BlogPost extends Model
     {
         parent::boot();//calls Model class where boot() lives
 
-        static::addGlobalScope(new LatestScope);
+        static::addGlobalScope(new LatestScope);//registering LatestScope method call
 
         static::deleting(function(BlogPost $blogPost){
             /*dd('I was deleted');/*With this statement we are testing that the callback for deleting()

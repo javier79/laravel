@@ -53,7 +53,8 @@ class PostController extends Controller
         return view('posts.index', 
         ['posts' => BlogPost::withCount('comments')/*->orderBy('created_at', 'desc')*/->get()]/*fetching
         all blogposts with comments_count value. The commented part inside function definition works as a local scope
-        was used as demo as we will work out in this lecture as a global scope*/
+        was used as demo as we will work out in this lecture as a global scope. This Query will be modified by adding
+        what is defined at LatestScope*/
         
     );
 
