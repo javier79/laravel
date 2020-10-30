@@ -100,6 +100,8 @@ class PostController extends Controller
     we are creating an instance of StorePost and storing it in $request. Object instance $request stores the contents input forms on create view. */
     {  
        $validatedData = $request->validated();//our rules were moved to StorePost.php and change validate() to validated()(this function is inherited from class FormRequest). If fields are left blank and submited the page will redirect to http://laravel.test/posts/create.
+       $validatedData['user_id'] = $request->user()->id;/**user() is a function that belongs to $request object and it contains the currently authenticated user and we are passing it's id attribute to user_id
+       but we also must define user_id as fillable in BlogPost.php */
        $blogPost = BlogPost::create($validatedData);/*We are calling static method create() that creates and save a new model(record),
        validatedData is an array containing the validated data, 
        also we are defining the attributes(in BlogPost class) we are mass assigning(meaning not individually) in this case only the title and content attributes

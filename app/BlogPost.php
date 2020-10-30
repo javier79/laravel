@@ -11,7 +11,7 @@ class BlogPost extends Model
 
     use SoftDeletes;
 
-    protected $fillable = ['title', 'content'];/*This add a level of security as it won't let any malicious
+    protected $fillable = ['title', 'content', 'user_id'];/*This add a level of security as it won't let any malicious
     program to write in any other column*/
 
     public function comments()
