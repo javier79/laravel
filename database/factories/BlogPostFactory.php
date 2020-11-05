@@ -8,9 +8,11 @@ use Faker\Generator as Faker;
 $factory->define(BlogPost::class, function (Faker $faker) {
     return [
         'title'=>$faker->sentence(10),//faker va a generar oracion de 10 palabras
-        'content'=> $faker->paragraphs(5, true)/*faker will generate 5 paragraphs, normally it
+        'content'=> $faker->paragraphs(5, true),/*faker will generate 5 paragraphs, normally it
         returns an array but as we are not processing anything we want it returned as text 
         and set second parameter to true for that matter.*/
+        'created_at' => $faker->dateTimeBetween('-3 months'),/**from three months ago til now, no need to specify a parameter
+        for the til now */
     ];
 });
 /*This state let us overwrite the definitions on private function createDummyBlogPost():BlogPost

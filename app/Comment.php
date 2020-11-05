@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;//added for soft deletes of comments
 
@@ -18,5 +18,18 @@ class Comment extends Model
     public function blogPost()
     {
         return $this->belongsTo('App\BlogPost');
+    }
+
+    public static function boot()/*The static boot() method is automatically run whenever 
+    a model is instantiated, so it is often an ideal place to add behavior, in this case
+    we are defining the behavior that will happen when a blogpost is deleted(softdeleted)
+    where it is comments are also soft deleted */
+    {
+        parent::boot();//calls Model class where boot() lives
+
+        static::addGlobalScope(new LatestScope);//registering LatestScope method call
+
+
+        
     }
 }

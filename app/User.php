@@ -30,7 +30,7 @@ class User extends Authenticatable
 
     public function blogPosts()
     {
-        return $this->hasMany(App\BlogPost::class);
+        return $this->hasMany('App\BlogPost');//'App\BlogPost'is the same as App\BlogPost::class
     }
 
     /**
