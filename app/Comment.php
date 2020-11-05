@@ -2,6 +2,7 @@
 
 namespace App;
 use App\Scopes\LatestScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;//added for soft deletes of comments
 
@@ -20,6 +21,11 @@ class Comment extends Model
         return $this->belongsTo('App\BlogPost');
     }
 
+    public function scopeLatest(Builder $query)
+    {
+        return $query->orderBy(static::CREATED_AT, 'desc');
+    }
+
     public static function boot()/*The static boot() method is automatically run whenever 
     a model is instantiated, so it is often an ideal place to add behavior, in this case
     we are defining the behavior that will happen when a blogpost is deleted(softdeleted)
@@ -27,7 +33,7 @@ class Comment extends Model
     {
         parent::boot();//calls Model class where boot() lives
 
-        static::addGlobalScope(new LatestScope);//registering LatestScope method call
+        // static::addGlobalScope(new LatestScope);//registering LatestScope method call
 
 
         

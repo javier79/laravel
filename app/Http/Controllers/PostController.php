@@ -51,8 +51,11 @@ class PostController extends Controller
         /******************************************************************************/
         //return view('posts.index', ['posts' => BlogPost::all()]);
         return view('posts.index', 
-        ['posts' => BlogPost::withCount('comments')/*->orderBy('created_at', 'desc')*/->get()]/*fetching
-        all blogposts with comments_count value. The commented part inside function definition works as a local scope
+        ['posts' => BlogPost::latest()->withCount('comments')/*->orderBy('created_at', 'desc')*/->get()]/*
+        latest() is scopeLatest(BlogPost.php) method call local scope definitions are named scopeNameOfScope
+        this is a rule naming local scopes. latest returns an instance de query builder to which
+        we are adding other quries(withCount() and get())
+        fetching all blogposts with comments_count value. The commented part inside function definition works as a local scope
         was used as demo as we will work out in this lecture as a global scope. This Query will be modified by adding
         what is defined at LatestScope*/
         
@@ -76,9 +79,14 @@ class PostController extends Controller
      */
     public function show($id) //remember $id is another reference to the argument in the Route (URI:posts/{post}), but you may name it as you wanted.
     {
-        return view('posts.show',[
-            'post'=> BlogPost::with('comments')->findorFail($id)
-            ]);
+        // return view('posts.show',[
+        //     'post'=> BlogPost::with(['comments'=> function ($query) {
+        //         return $query->latest();
+        //     }])->findorFail($id),
+        //     ]);
+        return view('posts.show', [
+            'post' => BlogPost::with('comments')->findOrFail($id),
+        ]);
         /*return view('posts.show',['post'=> BlogPost::findOrFail($id)]);/*findorFail() 
         redirects to page 404, if do not find the record. We commented the line above as we
         will be adding a comment list to blogpost with assoc comments*/
