@@ -2,6 +2,8 @@
     @extends('layout')
 
     @section('content')
+    <div class="row">
+        <div class="col-8">{{-- This bigger column contain the list of blog post,  --}}
         @forelse ($posts as $post){{--we are iterating around the $posts collection similar to @foreach
             de difference is thar @forelse let us use @empty clause to display a message if the
             collection is found to be empty --}}
@@ -51,6 +53,26 @@
             collection is found to be empty --}}
                 <p>No blog post yet!</p>
         @endforelse
+        </div>
+        <div class="col-4">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Most Commented</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">What people is currently talking about</h6>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach ($mostCommented as $post)
+                        <li class="list-group-item">
+                            <a href="{{ route('posts.show', ['post' => $post->id]) }}">
+                                {{ $post->title }}
+                            </a>
+                        </li>
+                   @endforeach
+                </ul>
+            </div>    
+        </div>
+    </div>
+
     @endsection('content')
 
     {{--The link for this view is laravel.test/posts, as i understand it's determined

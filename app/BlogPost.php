@@ -30,6 +30,11 @@ class BlogPost extends Model
         return $query->orderBy(static::CREATED_AT, 'desc');
     }
 
+    public function scopeMostCommented(Builder $query)
+    {
+        return $query->withCount('comments')->orderBy('comments_count', 'desc');
+    }
+
     public static function boot()/*The static boot() method is automatically run whenever 
     a model is instantiated, so it is often an ideal place to add behavior, in this case
     we are defining the behavior that will happen when a blogpost is deleted(softdeleted)
