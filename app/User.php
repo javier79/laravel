@@ -40,6 +40,14 @@ class User extends Authenticatable
         return $query->withCount('BlogPosts')->orderBy('blog_posts_count', 'desc');
     }
 
+    public function scopeWithMostBlogPostsLastMonth(Builder $query)
+    {
+        return $query->withCount(['blogPosts' => function (Builder $query) {//first query object fetch all blog posts, query object in closure adds other queries to first one
+            $query->whereBetween(static::CREATED_AT, [now()->subMonths(1), now()]);//sort created_at column from one month(from now or today) to now(today)
+        }])->has('blogPosts', '>=', 2)//Users with more than 2 blog posts(that are at least a month old)This line was corrected check notebookII, and looks different than tutorial.
+           ->orderBy('blog_posts_count', 'desc');
+    }
+
     /**
      * The attributes that should be cast to native types.
      *

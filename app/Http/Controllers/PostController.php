@@ -54,6 +54,7 @@ class PostController extends Controller
         ['posts' => BlogPost::latest()->withCount('comments')/*->orderBy('created_at', 'desc')*/->get(),
         'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
         'mostActive' => User::withMostBlogPosts()->take(5)->get(),
+        'mostActiveLastMonth' => User::withMostBlogPostsLastMonth()->take(5)->get(),
         ]/*
         latest() is scopeLatest(BlogPost.php) method call local scope definitions are named scopeNameOfScope
         this is a rule naming local scopes. latest returns an instance de query builder to which
