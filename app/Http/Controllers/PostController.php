@@ -10,7 +10,7 @@ use App\Http\Requests\StorePost;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use App\User;
+use App\User; 
 // [
 //     'show' => 'view',
 //     'create' => 'create',
