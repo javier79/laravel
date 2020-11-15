@@ -53,7 +53,7 @@ class AuthServiceProvider extends ServiceProvider
     
         /**the before handler will run before both define handlers before it */
         Gate::before(function ($user, $ability) {
-            if ($user->is_admin && in_array($ability, ['update'])) {
+            if ($user->is_admin && in_array($ability, ['update', 'delete'])) {
                 return true;
         /*returns true for any authenticated admin user, if this returns
                 false it checks above Gates. If i go to app and login under John Doe the only 

@@ -9,7 +9,14 @@
             collection is found to be empty --}}
             <p>
                 <h3>
-                    <a href="{{ route('posts.show', ['post'=>$post->id]) }}">{{ $post->title }}</a>
+                    @if($post->trashed()){{-- trashed = deleted --}}
+                        <del>
+                    @endif
+                    <a class="{{ $post->trashed() ? 'text-muted' : '' }}"
+                       href="{{ route('posts.show', ['post'=>$post->id]) }}">{{ $post->title }}</a>
+                    @if($post->trashed())
+                        </del>
+                    @endif
                     {{--'post.show' is the name of the route as per route:list. Parameter key 'post' 
                     from route:list URI(.../{post}) and $post(var from @forelse clause above)->id(parameter).
                     ['post'=>$post->id]('post' key references object(record)stored in $post which is accessing 
@@ -36,17 +43,19 @@
                 {{-- @cannot('delete', $post) SHOWS MESSAGE 
                 <p>You can't delete this post</p>
                 @endcannot --}}
-                @can('delete', $post){{-- allows diplay of delete button to author of blog post
-                    this is checking i someone is allowed to delete --}}
-                <form method="POST" class="fm-inline" action="{{ route('posts.destroy', ['post' => $post->id]) }}">{{--class="fm-inline" defined at app.scss affects only the delete button, 
-                    input tags behave as a block meaning they display in a new line,class="fm-inline" make it to display inline with the last displayed tag (<a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>) --}}
-                    @csrf{{-- This is a token to prevent exploits on the form, without it renders an error --}}
-                    @method('DELETE'){{-- method spoofing as html only manage method Get or POST, this will 
-                        handle the use of method DELETE(Route list) --}}
+                @if(!$post->trashed())
+                    @can('delete', $post){{-- allows diplay of delete button to author of blog post
+                        this is checking i someone is allowed to delete --}}
+                    <form method="POST" class="fm-inline" action="{{ route('posts.destroy', ['post' => $post->id]) }}">{{--class="fm-inline" defined at app.scss affects only the delete button, 
+                        input tags behave as a block meaning they display in a new line,class="fm-inline" make it to display inline with the last displayed tag (<a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>) --}}
+                        @csrf{{-- This is a token to prevent exploits on the form, without it renders an error --}}
+                        @method('DELETE'){{-- method spoofing as html only manage method Get or POST, this will 
+                            handle the use of method DELETE(Route list) --}}
 
-                    <input type="submit" value="Delete!" class="btn btn-primary" />
-                </form>
-                @endcan
+                        <input type="submit" value="Delete!" class="btn btn-primary" />
+                    </form>
+                    @endcan
+                @endif
             </p>
 
         @empty{{-- @forelse let us use @empty clause to display a message if the

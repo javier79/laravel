@@ -1,6 +1,8 @@
 <?php
 
 namespace App;
+
+use App\Scopes\DeletedAdminScope;
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -40,9 +42,11 @@ class BlogPost extends Model
     we are defining the behavior that will happen when a blogpost is deleted(softdeleted)
     where it is comments are also soft deleted */
     {
+        static::addGlobalScope(new DeletedAdminScope);//registering DeletedAdminScope method call
+        
         parent::boot();//calls Model class where boot() lives
 
-        // static::addGlobalScope(new LatestScope);//registering LatestScope method call
+        //static::addGlobalScope(new LatestScope);//registering LatestScope method call
 
         static::deleting(function(BlogPost $blogPost){
             /*dd('I was deleted');/*With this statement we are testing that the callback for deleting()
