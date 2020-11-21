@@ -17,8 +17,12 @@
          
 
         
-        @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 5){{-- For more info on Carbon library go to cheat sheet --}}
-            <strong>New!</strong> 
+        @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 30){{-- For more info on Carbon library go to cheat sheet --}}
+            @component('badge', ['type'=> 'primary']){{--'badge' is the component name
+            (component.blade.php) and 'primary' is another badge class from
+            bootstrap --}}
+                Brand new post!
+            @endcomponent
         @endif
 
         <h4>Comments</h4>
