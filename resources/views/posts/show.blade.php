@@ -18,11 +18,11 @@
 
         
         @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 30){{-- For more info on Carbon library go to cheat sheet --}}
-            @component('badge', ['type'=> 'primary']){{--'badge' is the component name
-            (component.blade.php) and 'primary' is another badge class from
+            <x-badge>{{--badge is the alias for
+            component.blade.php and 'primary' is another badge class from
             bootstrap --}}
                 Brand new post!
-            @endcomponent
+            </x-badge>{{-- this is the syntax for laravel 7, instead of @badge @endbadge --}}
         @endif
 
         <h4>Comments</h4>
