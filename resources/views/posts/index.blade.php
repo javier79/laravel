@@ -23,11 +23,9 @@
                     it's attribute id). {{ $post->title }}(render's attribute title)--}}
                 </h3>{{-- here we are echoing/accessing the model attributes
                     or the columns of the database. --}}
-                <p class="text-muted">
-                    Added {{ $post->created_at->diffForHumans() }}
-                    by {{ $post->user->name }}{{-- FOR THIS TO WORK A RELATION BETWEEN User.php and BlogPost.php 
-                        must be established check those classes --}}
-                </p>
+
+                <x-updated :date="$post->created_at"  :name="$post->user->name">{{-- laravel 7 syntax for components --}}
+                </x-updated>
 
                 @if($post->comments_count){{-- if test true, meaning the property contains a number larger than 0 --}}
                     <p>{{ $post->comments_count }} comments</p>{{-- echoes the number followed by the text comments --}}

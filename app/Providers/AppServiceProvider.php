@@ -16,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::component('components.badge', 'badge');
+        Blade::component('components.updated', 'updated');
     }
 
 

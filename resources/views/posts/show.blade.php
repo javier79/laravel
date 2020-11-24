@@ -21,12 +21,12 @@
 
         <p>{{ $post->content }}</p>
 
-        <p>Added {{ $post->created_at->diffForHumans() }}</p>{{--As created_at is by default
-        converted to a date object of the Carbon library we can use it's class methods
-        this method formats dates to show the time that have passed since that post was added--}}
-
          
-
+        <x-updated :date="$post->created_at"  :name="$post->user->name">{{-- laravel 7 syntax for components --}}
+        </x-updated>
+        <x-updated :date="$post->updated_at">  
+            Updated!{{-- we specified the $slot variable to override default Added --}}
+        </x-updated>
         
 
 
@@ -36,9 +36,8 @@
         <p>
             {{ $comment->content }}, 
         </p>
-        <p class="muted-text">
-            added {{ $comment->created_at->diffForHumans() }}
-        </p>
+        <x-updated :date="$comment->created_at">{{-- laravel 7 syntax for components --}}
+        </x-updated>
         @empty
         <p>No comments yet!</p>
 
