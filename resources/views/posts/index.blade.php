@@ -4,6 +4,7 @@
     @section('content')
           <div class="row">{{-- creates a row for div class="col-8" and div class="col-4" --}}
                     <div class="col-8">{{-- This bigger column contain the list of blog post,  --}}
+                    {{-- {{ $posts }} to peek at $posts value  --}}
                     @forelse ($posts as $post){{--we are iterating around the $posts collection similar to @foreach
                         de difference is thar @forelse let us use @empty clause to display a message if the
                         collection is found to be empty --}}
@@ -23,37 +24,48 @@
                                 it's attribute id). {{ $post->title }}(render's attribute title)--}}
                             </h3>{{-- here we are echoing/accessing the model attributes
                                 or the columns of the database. --}}
-
-                            <x-updated :date="$post->created_at"  :name="$post->user->name">{{-- laravel 7 syntax for components --}}
+                        
+                            <x-updated :date="$post->created_at"  :name="$post->user->name">{{-- laravel 7 syntax for components, before 
+                                this line executed a new query on each iteration, to stop executing another query we pass the user relation to our query definition on PostController ('posts' => BlogPost::latest()->withCount('comments')->with('user'))
+                                so that variable $posts contains the properties for the user name for "$post->user->name"(the same syntax could access properties on $post
+                                or execute a query as originally) to access it instead of having to execute another query on each iteration
+                                so that we can cut down on querys everytime we load our blog posts list on the app  --}}
                             </x-updated>
-
+                            
                             @if($post->comments_count){{-- if test true, meaning the property contains a number larger than 0 --}}
                                 <p>{{ $post->comments_count }} comments</p>{{-- echoes the number followed by the text comments --}}
                             @else
                                 <p>No comments yet!</p>{{-- if if test false --}}
                             @endif
-                            
-                            @can('update', $post){{-- allows diplay of edit button to author of blog post, this 
-                                is checking i someone is allowed to edit --}}
-                            <a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>{{-- Edit link on index, class="btn btn-primary" colors the link and make it look like a bottom --}}
-                            @endcan
+                            @auth
+                                @can('update', $post){{-- allows diplay of edit button to author of blog post, this 
+                                    is checking i someone is allowed to edit --}}
+                                <a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>{{-- Edit link on index, class="btn btn-primary" colors the link and make it look like a bottom --}}
+                                @endcan
+                            @endauth
 
                             {{-- @cannot('delete', $post) SHOWS MESSAGE 
                             <p>You can't delete this post</p>
                             @endcannot --}}
-                            @if(!$post->trashed())
-                                @can('delete', $post){{-- allows diplay of delete button to author of blog post
-                                    this is checking i someone is allowed to delete --}}
-                                <form method="POST" class="fm-inline" action="{{ route('posts.destroy', ['post' => $post->id]) }}">{{--class="fm-inline" defined at app.scss affects only the delete button, 
-                                    input tags behave as a block meaning they display in a new line,class="fm-inline" make it to display inline with the last displayed tag (<a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>) --}}
-                                    @csrf{{-- This is a token to prevent exploits on the form, without it renders an error --}}
-                                    @method('DELETE'){{-- method spoofing as html only manage method Get or POST, this will 
-                                        handle the use of method DELETE(Route list) --}}
+                            @auth{{-- below code will be considered only if authenticated, this means that this processes
+                                won't run if user is a guest(not logged out). This is an optimization as before it was
+                                checking for both authenticated and non authenticated users. Now will be checking 
+                                only if user is authenticated, eliminating for this users the gate checks
+                                that formely required the use of more resources --}}
+                                @if(!$post->trashed())
+                                    @can('delete', $post){{-- allows diplay of delete button to author of blog post
+                                        this is checking i someone is allowed to delete --}}
+                                    <form method="POST" class="fm-inline" action="{{ route('posts.destroy', ['post' => $post->id]) }}">{{--class="fm-inline" defined at app.scss affects only the delete button, 
+                                        input tags behave as a block meaning they display in a new line,class="fm-inline" make it to display inline with the last displayed tag (<a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>) --}}
+                                        @csrf{{-- This is a token to prevent exploits on the form, without it renders an error --}}
+                                        @method('DELETE'){{-- method spoofing as html only manage method Get or POST, this will 
+                                            handle the use of method DELETE(Route list) --}}
 
-                                    <input type="submit" value="Delete!" class="btn btn-primary" />
-                                </form>
-                                @endcan
-                            @endif
+                                        <input type="submit" value="Delete!" class="btn btn-primary" />
+                                    </form>
+                                    @endcan
+                                @endif
+                            @endauth    
                         </p>
 
                     @empty{{-- @forelse let us use @empty clause to display a message if the

@@ -51,7 +51,10 @@ class PostController extends Controller
         /******************************************************************************/
         //return view('posts.index', ['posts' => BlogPost::all()]);
         return view('posts.index', 
-        ['posts' => BlogPost::latest()->withCount('comments')/*->orderBy('created_at', 'desc')*/->get(),
+        ['posts' => BlogPost::latest()->withCount('comments')->with('user')/*->orderBy('created_at', 'desc')*/->get(),
+        /*with('user')is fetching or passing the user() relation of all this blog posts. By passing the user() relation
+        the line in index.blade: :name="$post->user->name just fetch the name from the relation passed
+        without having to execute a query for each blog post as was happening before */
         'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
         'mostActive' => User::withMostBlogPosts()->take(5)->get(),
         'mostActiveLastMonth' => User::withMostBlogPostsLastMonth()->take(5)->get(),
