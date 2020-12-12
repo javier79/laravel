@@ -8,9 +8,11 @@ use App\BlogPost;
 
 use App\Http\Requests\StorePost;
 
-use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Gate;
 use App\User;
+use Illuminate\Support\Facades\Cache;
+
 // [
 //     'show' => 'view',
 //     'create' => 'create',
@@ -34,31 +36,32 @@ class PostController extends Controller
      */
    public function index()
     {
-        /*FOR SHOWING THE PERFORMANCE IMPLICATIONS OF USING LAZY LOADING VS EAGER LOADING
-        DB::connection()->enableQueryLog();/*This instruction call the current connection and enable
-        query log, it enables the login of all querys that are done by laravel, so that every time a query is done
-        it's logged
+        $mostCommented = Cache::remember('mostCommented', 60, function(){
+            return BlogPost::mostCommented()->take(5)->get();
+        });/*give me what is under 'mosCommented' key, if not already 
+        on cache store it for 60 minutes, with the closure function we want to return the value to
+        be stored  * */
 
-        //$posts = BlogPost::all();//for lazy loading, run querys individually is slower
-        $posts = BlogPost::with('comments')->get();//for eager loading, run querys on sets and is faster
-        foreach ($posts as $post){//this line iterates over all blogpost
-            foreach($post->comments as $comment){//iterates over all blogpost comments
-                echo $comment->content;//echoes every comment of every blogpost
-            }
-        }
-        dd(DB::getQueryLog());//to see al querys that were made.
-        FOR SHOWING THE PERFORMANCE IMPLICATIONS OF USING LAZY LOADING VS EAGER LOADING
-        /******************************************************************************/
-        //return view('posts.index', ['posts' => BlogPost::all()]);
+        $mostActive = Cache::remember('mostActive', 60, function() {
+            return User::withMostBlogPosts()->take(5)->get();
+        });
+
+        $mostActiveLastMonth = Cache::remember('mostActiveLastMonth', 60, function() {
+            return User::withMostBlogPostsLastMonth()->take(5)->get();
+        });
+
+
         return view('posts.index', 
         ['posts' => BlogPost::latest()->withCount('comments')->with('user')/*->orderBy('created_at', 'desc')*/->get(),
         /*with('user')is fetching or passing the user() relation of all this blog posts. By passing the user() relation
         the line in index.blade: :name="$post->user->name just fetch the name from the relation passed
         without having to execute a query for each blog post as was happening before */
-        'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
-        'mostActive' => User::withMostBlogPosts()->take(5)->get(),
-        'mostActiveLastMonth' => User::withMostBlogPostsLastMonth()->take(5)->get(),
-        ]/*
+        'mostCommented' => $mostCommented,/*moving the query to cache outside the view() function,
+         means an optimization as when view() execute it will imply
+         a lesser query */
+        'mostActive' => $mostActive,//Variable define above and stored as cache data
+        'mostActiveLastMonth' => $mostActiveLastMonth,////Variable define above and stored as cache data
+        ] );/*
         latest() is scopeLatest(BlogPost.php) method call local scope definitions are named scopeNameOfScope
         this is a rule naming local scopes. latest returns an instance de query builder to which
         we are adding other quries(withCount() and get())
@@ -66,8 +69,6 @@ class PostController extends Controller
         was used as demo as we will work out in this lecture as a global scope. This Query will be modified by adding
         what is defined at LatestScope*/
         
-    );
-
         /*posts.index(is the reference for posts folder and index(view))  
         The parameter is an associative array, 'posts' is an arbitrary key name 
         (referencing BlogPost::all() value in the associative array) and it's value(instance object)will be stored in the variable 
