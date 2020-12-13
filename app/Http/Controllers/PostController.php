@@ -36,17 +36,17 @@ class PostController extends Controller
      */
    public function index()
     {
-        $mostCommented = Cache::remember('mostCommented', 60, function(){
+        $mostCommented = Cache::remember('blog-post-commented', 60, function(){
             return BlogPost::mostCommented()->take(5)->get();
-        });/*give me what is under 'mosCommented' key, if not already 
+        });/*give me what is under 'blog-post-commented' key, if not already 
         on cache store it for 60 minutes, with the closure function we want to return the value to
         be stored  * */
 
-        $mostActive = Cache::remember('mostActive', 60, function() {
+        $mostActive = Cache::remember('users-most-active' , 60, function() {
             return User::withMostBlogPosts()->take(5)->get();
         });
 
-        $mostActiveLastMonth = Cache::remember('mostActiveLastMonth', 60, function() {
+        $mostActiveLastMonth = Cache::remember('users-most-active-last-month', 60, function() {
             return User::withMostBlogPostsLastMonth()->take(5)->get();
         });
 
@@ -92,8 +92,15 @@ class PostController extends Controller
         //         return $query->latest();
         //     }])->findorFail($id),
         //     ]);
+
+        $blogPost = Cache::remember("blog-post-{$id}", 60, function() use($id) {/*"blog-post-{$id}" is a dynamic 
+        key so that it fetches the blog post selected otherwise it will fetch the same blog posts.
+        use($id) we are passing variable $id to be accessed from inside the closure function**/
+            return BlogPost::with('comments')->findOrFail($id);
+        });
+
         return view('posts.show', [
-            'post' => BlogPost::with('comments')->findOrFail($id),
+            'post' => $blogPost,//we are passing $blogPost to the view above we define $blogPost
         ]);
         /*return view('posts.show',['post'=> BlogPost::findOrFail($id)]);/*findorFail() 
         redirects to page 404, if do not find the record. We commented the line above as we

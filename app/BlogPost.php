@@ -7,6 +7,7 @@ use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class BlogPost extends Model
 {
@@ -61,6 +62,13 @@ class BlogPost extends Model
         /*CODE ABOVE UNCOMMENTED FOR BRANCH RESTORING SOFT DELETED MODEL, MAKING COMMENTS TABLE
         TO SOFT DELETE, AS SOFT DELETION WAS SET(in DB BY MIGRATION/Comments.php) THE CODE
         ABOVE WON'T PERMANENTLY DELETE THE COMMENTS(only SOFT DELETES)*/
+
+        static::updating(function (BlogPost $blogPost) {/*resets the cache, when cache is reset a query is make to DB
+            for the changes made (in our case a title edited) once at app level the data is updated it goes into cache
+            so that if page is refresh it fetch part or all data from cache. In our case our data is cached
+            when it shows 4 querys, when we reload it shows only two queries as the rest of the data was fetch from cache*/
+            Cache::forget("blog-post-{$blogPost->id}");
+        });
 
         static::restoring(function (BlogPost $blogPost) {
             $blogPost->comments()->restore();

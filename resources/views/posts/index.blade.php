@@ -37,7 +37,11 @@
                             @else
                                 <p>No comments yet!</p>{{-- if if test false --}}
                             @endif
-                            @auth
+                            @auth{{-- below code will be considered only if authenticated, this means that this processes
+                                won't run if user is a guest(not logged in). This is an optimization as before it was
+                                checking for both authenticated and non authenticated users. Now will be checking 
+                                only if user is authenticated, eliminating for this users the gate checks
+                                that formely required the use of more resources --}}
                                 @can('update', $post){{-- allows diplay of edit button to author of blog post, this 
                                     is checking i someone is allowed to edit --}}
                                 <a href="{{ route('posts.edit', ['post'=>$post->id]) }}"class="btn btn-primary"> Edit</a>{{-- Edit link on index, class="btn btn-primary" colors the link and make it look like a bottom --}}
@@ -48,7 +52,7 @@
                             <p>You can't delete this post</p>
                             @endcannot --}}
                             @auth{{-- below code will be considered only if authenticated, this means that this processes
-                                won't run if user is a guest(not logged out). This is an optimization as before it was
+                                won't run if user is a guest(not logged in). This is an optimization as before it was
                                 checking for both authenticated and non authenticated users. Now will be checking 
                                 only if user is authenticated, eliminating for this users the gate checks
                                 that formely required the use of more resources --}}
