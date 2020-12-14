@@ -92,6 +92,8 @@ class PostController extends Controller
         //         return $query->latest();
         //     }])->findorFail($id),
         //     ]);
+        
+        $counter = 0;//for users currently on the page
 
         $blogPost = Cache::remember("blog-post-{$id}", 60, function() use($id) {/*"blog-post-{$id}" is a dynamic 
         key so that it fetches the blog post selected otherwise it will fetch the same blog posts.
@@ -101,6 +103,7 @@ class PostController extends Controller
 
         return view('posts.show', [
             'post' => $blogPost,//we are passing $blogPost to the view above we define $blogPost
+            'counter' => $counter,//for users currently on the page
         ]);
         /*return view('posts.show',['post'=> BlogPost::findOrFail($id)]);/*findorFail() 
         redirects to page 404, if do not find the record. We commented the line above as we

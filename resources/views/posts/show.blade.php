@@ -28,6 +28,7 @@
             Updated!{{-- we specified the $slot variable to override default Added --}}
         </x-updated>
         
+        <p>Currently read by {{ $counter }} people</p> 
 
 
         <h4>Comments</h4>
