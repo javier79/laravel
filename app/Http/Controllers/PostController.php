@@ -86,23 +86,81 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id) //remember $id is another reference to the argument in the Route (URI:posts/{post}), but you may name it as you wanted.
-    {
-        // return view('posts.show',[
-        //     'post'=> BlogPost::with(['comments'=> function ($query) {
-        //         return $query->latest();
-        //     }])->findorFail($id),
-        //     ]);
+    {  
         
-        $counter = 0;//for users currently on the page
-
         $blogPost = Cache::remember("blog-post-{$id}", 60, function() use($id) {/*"blog-post-{$id}" is a dynamic 
         key so that it fetches the blog post selected otherwise it will fetch the same blog posts.
         use($id) we are passing variable $id to be accessed from inside the closure function**/
-            return BlogPost::with('comments')->findOrFail($id);
-        });
+        return BlogPost::with('comments')->findOrFail($id);
+    });
+        /*********USING CACHE FOR STORAGE IMPLEMENTATION*************/
+        $sessionId = session()->getId();/*fetch current user session id, we read this session variable to
+        keep track of users last visit times in the cache */
+        //print_r($sessionId);
+        
+        //dd($sessionId);
+        $counterKey = "blog-post-{$id}-counter";//from this key name we will read and store the counter in cache(this variable belongs to the visited blog post and not to current user)
+        $usersKey = "blog-post-{$id}-users";//from this var we will read and store information about user visit to page in cache(this variable belongs to the visited blog post and not to current user)
+        //dd($usersKey);
+        $users = Cache::get($usersKey, []);/*read from cache a list of user session ids and last time visit times.
+        only way for current user to be on this list is because a previous active session was refreshed or reloaded,
+        but not the on user's first visit.
+        (SEE C:\Users\enriq\Dropbox\laravel\practical_using_cache_as_storage) update check the algorithm on notebookIII better */
+        //dd($users);
+        $usersUpdate = [];//to store users that should stay on list because have not expired
+        $diffrence = 0;//this var reference our counter previous to finally read the counter from cache
+        $now = now();//current time
+        /**THIS foreach LOOP IS THE SECOND PART OF OUR ALGORITHM("Loop over elements")
+         * (SEE C:\Users\enriq\Dropbox\laravel\practical_using_cache_as_storage)update check the algorithm on notebookIII better 
+         If current user is first visitor to the page or if previous visitors session expired means $users is an empty array
+         so the program skip the foreach*/
+        foreach ($users as $session => $lastVisit) {//iterate over list of users(from cache) session id's and get last visit times.(When it's current user ever visit it won't be on cache list)
+            if ($now->diffInMinutes($lastVisit) >= 1) {/*if the difference between 
+            now and the last visit of a particular user is equal or more than one minute, $sessionId is expired and
+            will decrease the diffrence variable(that is our counter).* */
+                $diffrence--;//counter decrease(users that are no longer in the page)
+            } else {//otherwise we'll store this element at $usersUpdate[$session](to be save on cache, on next update  )
+            
+                $usersUpdate[$session] = $lastVisit;/*keeps in session unexpired users(other users present on real time) on cache,
+                as i understand this might catch a previous unexpired session of current user(as if curren
+                user reloads the page without its original session come to expire) and unified(to my understand it will unified to the original session time not restarting with the current one) it internally(so that there
+                are not two or more unexpired session attached to a single user, that why even when
+                you reload the page the counter for current users on page remain the same ) */
+                //print_r($usersUpdate[$session]);
+            }
+        }
+        //dd($users);
+        /*we are verifying if CURRENT USER $sessionId is not in $users array(for current user to be in $users most be another unexpired session on the list,
+        as at this point on work flow current user should not be in $users) OR(||) 
+        if CURRENT USER $sessionId is on $users array(from a previous session) but expired *
+        ON ALGORITHM THIS PART IS THE ONE WITH TWO DESCISION DIAMONS TOGETHER*/
+        //dd(array_key_exists($sessionId, $users));
+        if(!array_key_exists($sessionId, $users) || $now->diffInMinutes($users[$sessionId]) >= 1) {/*current user first ever visit enters here(!array_key_exists($sessionId, $users)or
+            if  current user is on cache but expired. This will be skipped if current user was already on cache but with unexpired session(as might happen if current session is reloaded) */
+            $diffrence++;//counter increment if current user not in $users 
+        }
+        //dd($diffrence);
+        $usersUpdate[$sessionId] = $now;/*updating the actual visit time of the current user to current time/current users on cache with unexpired session update their session time here .*/
+        Cache::   forever($usersKey, $usersUpdate);/*saved updated last visit time($usersUpdate) of current user if user was already on cache or to be added
+         to cache list for first time*/    
+         //dd(Cache::has($counterKey));
+        if (!Cache::has($counterKey)) {/*in case current users are the first visitors ever
+            has() returns false (the only way to enter here is with $counterKey with value 0 as per tutorial*/
+            
+            Cache::forever($counterKey, 1);//$counterKey set to 1
+
+        } else {
+            Cache::increment($counterKey, $diffrence);/*takes $diffrence value(when positive) increments 
+            integer under $counterKey otherwise if negative decrease integer referenced by $counterKey.
+            To enter here blog post have already been visited before by other users or current user itself*/
+        }
+
+        $counter = Cache::get($counterKey);//users currently on page, and    passed below for rendering on view
+        //dd($users);
+        /**END*********USING CACHE FOR STORAGE IMPLEMENTATION*************/
 
         return view('posts.show', [
-            'post' => $blogPost,//we are passing $blogPost to the view above we define $blogPost
+            'post' => $blogPost,//we are passing $blogPost to the view, above we define $blogPost
             'counter' => $counter,//for users currently on the page
         ]);
         /*return view('posts.show',['post'=> BlogPost::findOrFail($id)]);/*findorFail() 
