@@ -36,12 +36,12 @@ class PostController extends Controller
      */
    public function index()
     {
-        $mostCommented = Cache::remember('blog-post-commented', 60, function(){
+        $mostCommented = Cache::tags(['blog-post'])->remember('blog-post-commented', 60, function(){
             return BlogPost::mostCommented()->take(5)->get();
         });/*give me what is under 'blog-post-commented' key, if not already 
         on cache store it for 60 minutes, with the closure function we want to return the value to
         be stored  * */
-
+        
         $mostActive = Cache::remember('users-most-active' , 60, function() {
             return User::withMostBlogPosts()->take(5)->get();
         });
@@ -88,7 +88,7 @@ class PostController extends Controller
     public function show($id) //remember $id is another reference to the argument in the Route (URI:posts/{post}), but you may name it as you wanted.
     {  
         
-        $blogPost = Cache::remember("blog-post-{$id}", 60, function() use($id) {/*"blog-post-{$id}" is a dynamic 
+        $blogPost = Cache::tags(['blog-post'])->remember("blog-post-{$id}", 60, function() use($id) {/*"blog-post-{$id}" is a dynamic 
         key so that it fetches the blog post selected otherwise it will fetch the same blog posts.
         use($id) we are passing variable $id to be accessed from inside the closure function**/
         return BlogPost::with('comments')->findOrFail($id);
@@ -102,7 +102,7 @@ class PostController extends Controller
         $counterKey = "blog-post-{$id}-counter";//from this key name we will read and store the counter in cache(this variable belongs to the visited blog post and not to current user)
         $usersKey = "blog-post-{$id}-users";//from this var we will read and store information about user visit to page in cache(this variable belongs to the visited blog post and not to current user)
         //dd($usersKey);
-        $users = Cache::get($usersKey, []);/*read from cache a list of user session ids and last time visit times.
+        $users = Cache::tags(['blog-post'])->get($usersKey, []);/*read from cache a list of user session ids and last time visit times.
         only way for current user to be on this list is because a previous active session was refreshed or reloaded,
         but not the on user's first visit.
         (SEE C:\Users\enriq\Dropbox\laravel\practical_using_cache_as_storage) update check the algorithm on notebookIII better */
@@ -141,21 +141,21 @@ class PostController extends Controller
         }
         //dd($diffrence);
         $usersUpdate[$sessionId] = $now;/*updating the actual visit time of the current user to current time/current users on cache with unexpired session update their session time here .*/
-        Cache::   forever($usersKey, $usersUpdate);/*saved updated last visit time($usersUpdate) of current user if user was already on cache or to be added
+        Cache::tags(['blog-post'])->forever($usersKey, $usersUpdate);/*saved updated last visit time($usersUpdate) of current user if user was already on cache or to be added
          to cache list for first time*/    
          //dd(Cache::has($counterKey));
-        if (!Cache::has($counterKey)) {/*in case current users are the first visitors ever
+        if (!Cache::tags(['blog-post'])->has($counterKey)) {/*in case current users are the first visitors ever
             has() returns false (the only way to enter here is with $counterKey with value 0 as per tutorial*/
             
-            Cache::forever($counterKey, 1);//$counterKey set to 1
+            Cache::tags(['blog-post'])->forever($counterKey, 1);//$counterKey set to 1
 
         } else {
-            Cache::increment($counterKey, $diffrence);/*takes $diffrence value(when positive) increments 
+            Cache::tags(['blog-post'])->increment($counterKey, $diffrence);/*takes $diffrence value(when positive) increments 
             integer under $counterKey otherwise if negative decrease integer referenced by $counterKey.
             To enter here blog post have already been visited before by other users or current user itself*/
         }
 
-        $counter = Cache::get($counterKey);//users currently on page, and    passed below for rendering on view
+        $counter = Cache::tags(['blog-post'])->get($counterKey);//users currently on page, and    passed below for rendering on view
         //dd($users);
         /**END*********USING CACHE FOR STORAGE IMPLEMENTATION*************/
 
